@@ -1,0 +1,18 @@
+services:
+  db:
+    image: postgres:16.15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-local-owner-only}
+      POSTGRES_DB: accessledger_demo
+    ports:
+      - '127.0.0.1:55432:5432'
+    volumes:
+      - accessledger_pg:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres -d accessledger_demo']
+      interval: 5s
+      timeout: 3s
+      retries: 10
+volumes:
+  accessledger_pg:

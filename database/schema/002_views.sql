@@ -6,7 +6,7 @@
 -- Run after 001_core_schema.sql:  psql -f database/schema/002_views.sql
 -- ============================================================================
 
-BEGIN;
+
 
 DROP VIEW IF EXISTS vw_denied_access_attempts;
 DROP VIEW IF EXISTS vw_access_audit_history;
@@ -63,23 +63,24 @@ WHERE      u.status = 'ACTIVE'
 
 -- 3. Resource access summary --------------------------------------------------
 CREATE VIEW vw_resource_access_summary AS
-SELECT s.resource_id,
-       s.resource_code,
-       s.name         AS resource_name,
-       s.type         AS resource_type,
-       s.is_active,
-       COUNT(DISTINCT p.permission_id)   AS defined_actions,
-       COUNT(DISTINCT rp.role_id)        AS roles_referencing,
-       COUNT(DISTINCT ur.user_id)        AS users_with_any_role_path,
-       COUNT(l.log_id)                   AS attempts,
-       COUNT(*) FILTER (WHERE l.decision = 'DENY') AS denied
-FROM       resource        s
-LEFT JOIN  permission       p  ON p.resource_id    = s.resource_id
-LEFT JOIN  role_permission  rp ON rp.permission_id = p.permission_id
-LEFT JOIN  user_role        ur ON ur.role_id       = rp.role_id
-LEFT JOIN  access_log       l  ON l.permission_id  = p.permission_id
-GROUP BY   s.resource_id, s.resource_code, s.name, s.type, s.is_active;
-
+WITH event_totals AS (
+ SELECT p.resource_id, count(*) AS attempts,
+        count(*) FILTER (WHERE l.decision='DENY') AS denied
+ FROM access_log l JOIN permission p USING(permission_id) GROUP BY p.resource_id
+), paths AS (
+ SELECT p.resource_id, count(DISTINCT rp.role_id) AS roles_referencing,
+        count(DISTINCT ur.user_id) AS users_with_any_role_path
+ FROM permission p LEFT JOIN role_permission rp USING(permission_id)
+ LEFT JOIN user_role ur USING(role_id) GROUP BY p.resource_id
+), actions AS (
+ SELECT resource_id,count(*) AS defined_actions FROM permission GROUP BY resource_id
+)
+SELECT s.resource_id,s.resource_code,s.name AS resource_name,s.type AS resource_type,s.is_active,
+ coalesce(a.defined_actions,0) AS defined_actions, coalesce(p.roles_referencing,0) AS roles_referencing,
+ coalesce(p.users_with_any_role_path,0) AS users_with_any_role_path,
+ coalesce(e.attempts,0) AS attempts,coalesce(e.denied,0) AS denied
+FROM resource s LEFT JOIN event_totals e USING(resource_id)
+LEFT JOIN paths p USING(resource_id) LEFT JOIN actions a USING(resource_id);
 
 -- 4. Access audit history (FR-05, FR-06) --------------------------------------
 -- Fully flattened event stream: every log row resolvable to human-readable
@@ -94,6 +95,7 @@ SELECT l.log_id,
        u.full_name,
        d.department_name,
        p.permission_id,
+       s.resource_id,
        s.resource_code,
        s.name     AS resource_name,
        s.type     AS resource_type,
@@ -109,4 +111,8 @@ JOIN       resource    s ON s.resource_id   = p.resource_id;
 CREATE VIEW vw_denied_access_attempts AS
 SELECT * FROM vw_access_audit_history WHERE decision = 'DENY';
 
-COMMIT;
+
+CREATE VIEW vw_denied_access_summary AS
+SELECT u.user_id,u.full_name,count(l.log_id) AS denied_attempts
+FROM app_user u LEFT JOIN access_log l ON l.user_id=u.user_id AND l.decision='DENY'
+GROUP BY u.user_id,u.full_name;

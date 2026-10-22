@@ -45,8 +45,10 @@ if [ ! -s "$PGDATA/PG_VERSION" ]; then
 fi
 
 echo "==> Starting cluster on port $PGPORT"
-pg_ctl -D "$PGDATA" -l "$ROOT/.pgdata/server.log" -w start >/dev/null
-"$PREFIX/usr/lib/postgresql/16/bin/createdb" -h "$PGSOCK" -p "$PGPORT" -U "$PGUSER" accessledger 2>/dev/null || true
+if ! pg_ctl -D "$PGDATA" status >/dev/null 2>&1; then
+  pg_ctl -D "$PGDATA" -l "$ROOT/.pgdata/server.log" -w -t 120 start >/dev/null
+fi
+"$PREFIX/usr/lib/postgresql/16/bin/createdb" -h "$PGSOCK" -p "$PGPORT" -U "$PGUSER" accessledger_demo 2>/dev/null || true
 
-echo "    $(psql -h "$PGSOCK" -p "$PGPORT" -U "$PGUSER" -d accessledger -tAc 'select version()')"
+echo "    $(psql -h "$PGSOCK" -p "$PGPORT" -U "$PGUSER" -d accessledger_demo -tAc 'select version()')"
 echo "==> Ready. Run: source scripts/db-env.sh"

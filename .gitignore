@@ -11,3 +11,11 @@ __pycache__/
 
 # Environment
 .env
+# App/build/test artifacts
+node_modules/
+frontend/dist/
+frontend/test-results/
+frontend/playwright-report/
+.superpowers/
+*.log
+.env.*.local

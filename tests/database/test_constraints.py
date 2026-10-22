@@ -20,7 +20,9 @@ PGHOST = os.environ.get("PGHOST", str(
     __import__("pathlib").Path(__file__).resolve().parents[2] / ".pgsock"))
 PGPORT = os.environ.get("PGPORT", "55432")
 PGUSER = os.environ.get("PGUSER", "postgres")
-PGDATABASE = os.environ.get("PGDATABASE", "accessledger")
+PGDATABASE = os.environ.get("PGDATABASE", "accessledger_test")
+if not PGDATABASE.startswith("accessledger_test"):
+    raise RuntimeError("Tests require an accessledger_test* database")
 
 
 def connect():

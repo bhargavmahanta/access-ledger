@@ -1,34 +1,4 @@
--- ============================================================================
--- AccessLedger — core schema (authoritative DDL)
--- ----------------------------------------------------------------------------
--- This file is the single source of truth for the database structure.
--- Alembic/SQLAlchemy do not define the schema; when the backend arrives its
--- models are verified against what this file creates.
---
--- Apply with:  psql -f database/schema/001_core_schema.sql
--- Idempotent: drops and rebuilds, so re-running is safe.
---
--- Design decisions and their justification: docs/database-design.md
--- Normalization evidence:                       docs/normalization.md
--- ============================================================================
-
-BEGIN;
-
--- Reverse dependency order: every child is dropped before its parents.
-DROP TRIGGER IF EXISTS trg_access_log_append_only_trunc ON access_log;
-DROP TRIGGER IF EXISTS trg_access_log_append_only      ON access_log;
-DROP TRIGGER IF EXISTS trg_permission_meaning_frozen   ON permission;
-DROP TRIGGER IF EXISTS trg_app_user_email_normalize    ON app_user;
-DROP TABLE IF EXISTS access_log     CASCADE;
-DROP TABLE IF EXISTS role_permission CASCADE;
-DROP TABLE IF EXISTS permission      CASCADE;
-DROP TABLE IF EXISTS user_role       CASCADE;
-DROP TABLE IF EXISTS resource        CASCADE;
-DROP TABLE IF EXISTS role            CASCADE;
-DROP TABLE IF EXISTS app_user        CASCADE;
-DROP TABLE IF EXISTS department      CASCADE;
-
-
+-- Baseline DDL. Apply once through Alembic or scripts/apply-sql.sh.
 -- 1. DEPARTMENT -----------------------------------------------------------------
 CREATE TABLE department (
     department_id   INTEGER      GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -136,7 +106,7 @@ CREATE TABLE access_log (
     occurred_at   TIMESTAMPTZ NOT NULL DEFAULT now(),
     decision      VARCHAR(5)  GENERATED ALWAYS AS
                   (CASE WHEN reason_code = 'PERMISSION_GRANTED' THEN 'ALLOW' ELSE 'DENY' END)
-                  STORED,
+                  STORED NOT NULL,
     reason_code   VARCHAR(25) NOT NULL,
     CONSTRAINT fk_access_log_user FOREIGN KEY (user_id)
         REFERENCES app_user (user_id) ON DELETE RESTRICT,
@@ -217,30 +187,3 @@ CREATE TRIGGER trg_permission_meaning_frozen
     FOR EACH ROW EXECUTE FUNCTION permission_meaning_is_frozen();
 
 
--- ----------------------------------------------------------------------------
--- Application database role
--- ----------------------------------------------------------------------------
--- The application may read everything and append access events, but may never
--- rewrite or delete one. Privilege layer beneath the trigger.
---
--- Requires CREATEROLE; skipped with a notice when unavailable, so the DDL still
--- applies on a restricted account.
-DO $$
-BEGIN
-    IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'accessledger_app') THEN
-        CREATE ROLE accessledger_app NOLOGIN;
-    END IF;
-    GRANT USAGE ON SCHEMA public TO accessledger_app;
-    GRANT SELECT, INSERT, UPDATE
-        ON department, app_user, role, user_role, resource, permission, role_permission
-        TO accessledger_app;
-    GRANT SELECT, INSERT ON access_log TO accessledger_app;
-    GRANT USAGE ON ALL SEQUENCES IN SCHEMA public TO accessledger_app;
-    -- Belt and braces: the trigger already refuses these.
-    REVOKE UPDATE, DELETE, TRUNCATE ON access_log FROM accessledger_app;
-EXCEPTION WHEN insufficient_privilege THEN
-    RAISE NOTICE 'Skipped application role setup: insufficient privileges (CREATEROLE).';
-END;
-$$;
-
-COMMIT;
