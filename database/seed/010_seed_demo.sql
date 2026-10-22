@@ -1,3 +1,5 @@
+-- HISTORICAL FIXTURE ONLY: manually authored events from the earlier prototype.
+-- Current setup uses 020_complete_demo.sql and genuine evaluate_access calls.
 -- ============================================================================
 -- AccessLedger — synthetic demonstration data
 -- ----------------------------------------------------------------------------

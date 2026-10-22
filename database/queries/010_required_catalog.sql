@@ -1,7 +1,7 @@
 -- Exact faculty catalog. Override values with psql -v user_id=... etc.
 \if :{?user_id}
 \else
-\set user_id 1
+SELECT user_id FROM app_user WHERE email='priya.sharma@uni.edu' \gset
 \endif
 \if :{?department_id}
 \else
@@ -9,7 +9,15 @@
 \endif
 \if :{?permission_id}
 \else
-\set permission_id 1
+SELECT p.permission_id FROM permission p JOIN resource r USING(resource_id) WHERE r.resource_code='RES-DB-01' AND p.action_code='READ' \gset
+\endif
+\if :{?date_from}
+\else
+SELECT (CURRENT_TIMESTAMP-INTERVAL '7 days')::text AS date_from \gset
+\endif
+\if :{?date_to}
+\else
+SELECT CURRENT_TIMESTAMP::text AS date_to \gset
 \endif
 \echo 'Q01 Active employees'
 SELECT user_id,full_name,email FROM app_user WHERE status='ACTIVE' ORDER BY user_id;
@@ -35,8 +43,8 @@ SELECT * FROM vw_denied_access_attempts ORDER BY occurred_at DESC,log_id DESC;
 SELECT * FROM vw_denied_access_summary ORDER BY denied_attempts DESC,user_id;
 \echo 'Q12 Most frequently accessed resources'
 SELECT resource_code,attempts,denied FROM vw_resource_access_summary ORDER BY attempts DESC,resource_id;
-\echo 'Q13 Audit history in a selected interval: last seven days'
-SELECT * FROM vw_access_audit_history WHERE occurred_at>=CURRENT_TIMESTAMP-INTERVAL '7 days' AND occurred_at<CURRENT_TIMESTAMP ORDER BY occurred_at,log_id;
+\echo 'Q13 Audit history in a selected interval (default: last seven days)'
+SELECT * FROM vw_access_audit_history WHERE occurred_at>=:'date_from'::timestamptz AND occurred_at<:'date_to'::timestamptz ORDER BY occurred_at,log_id;
 \echo 'Q14 Users possessing selected permission'
 SELECT user_id,full_name,email FROM vw_effective_user_permissions WHERE permission_id=:permission_id ORDER BY user_id;
 \echo 'Q15 Complete joined audit report'

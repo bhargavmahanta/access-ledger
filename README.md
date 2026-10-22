@@ -1,149 +1,94 @@
 # AccessLedger
 
-**A relational database for access control and audit records.**
+**A role-based access control and security audit management system.**
 
-Database Systems project — BCSE302L / BCSE302P. The database is the deliverable;
-the schema, the SQL and the constraint tests are the product.
+Database Systems — BCSE302L / BCSE302P, VIT Vellore. PostgreSQL owns authorization, constraints, transactions and audit recording; the FastAPI API and React interface demonstrate those capabilities.
 
-AccessLedger models who a user is, which roles they hold, which actions those
-roles permit on registered resources, and the outcome of every recorded access
-attempt.
+![AccessLedger dashboard](docs/evidence/current/dashboard.png)
 
----
-
-## Status — Review 2, Phase 1
-
-| Area | State |
-|---|---|
-| Relational schema (8 relations) | **Complete** — implemented and running |
-| Normalization analysis | **Complete** — 3NF proven, BCNF assessed |
-| ER diagram | **Complete** — Crow's Foot, Mermaid |
-| Synthetic seed data | **Complete** — deterministic, 8 users / 38 events |
-| SQL demonstrations | **Complete** — joins, aggregation, subqueries, views |
-| Integrity tests | **Complete** — 39 passing against a real database |
-| Access-evaluation routine | Not started — Phase 2 |
-| Transactions & concurrency | Not started — Phase 3 |
-| Indexing & `EXPLAIN ANALYZE` | Not started — Phase 3 |
-| Backend / frontend | Not started — later phases |
-
-Executed results, not claims: **[`docs/evidence/phase1-run.md`](docs/evidence/phase1-run.md)**.
-
----
-
-## Quick start
-
-No Docker, no root, no system install required.
+## Start locally (Linux / WSL, Python 3.12+)
 
 ```bash
-./scripts/bootstrap-postgres.sh     # fetch + start a private PostgreSQL 16
-./scripts/reset-db.sh               # build schema, views, seed data
-source scripts/db-env.sh            # psql/createdb now target this database
-psql                               # interactive shell
+python3 -m venv .venv
+.venv/bin/python -m pip install -r requirements.txt
+./scripts/bootstrap-postgres.sh
+./scripts/bootstrap-node.sh
+export PATH="$PWD/.tools/node/current/bin:$PATH"
+npm --prefix frontend ci
+.venv/bin/python scripts/setup-db.py
+./scripts/dev.sh
 ```
 
-Run the SQL demonstrations and the tests:
+Open [the application](http://127.0.0.1:5173) and [interactive API docs](http://127.0.0.1:8000/docs). The API binds to 127.0.0.1:8000 and Vite to 127.0.0.1:5173. Stop both with Ctrl+C. The private PostgreSQL server remains running; stop it with `source scripts/db-env.sh` then `pg_ctl -D .pgdata stop -m fast`.
+
+The PostgreSQL bootstrap reuses an existing cluster and starts it only when stopped. It requires unprivileged `apt-get download`, `dpkg-deb` and PostgreSQL 16 packages if the local runtime is missing. Node bootstrap installs verified Node 22.23.4 LTS Linux x64 into the Linux user's cache, which avoids slow WSL Windows-filesystem extraction. An already installed suitable Node LTS can be used instead. Python/Node dependencies are pinned in requirements.txt and package-lock.json.
+
+Normal setup creates `accessledger_demo`, applies outstanding Alembic migrations and seeds only an empty database. It never drops existing data. The earlier `accessledger` database and `docs/evidence/phase1-run.md` are preserved. **That historical file is not current test evidence.**
+
+## Docker PostgreSQL alternative
 
 ```bash
-for f in database/queries/*.sql; do psql -f "$f"; done
-.venv/bin/pytest tests/database -v
+docker compose up -d --wait
+export PGHOST=127.0.0.1 PGPORT=55432 PGUSER=postgres
+export PGPASSWORD=local-owner-only
+.venv/bin/python scripts/setup-db.py
+./scripts/dev.sh
 ```
 
-Regenerate the evidence file from a fresh run:
+Stop the private cluster first if it already occupies port 55432. Compose binds PostgreSQL to loopback and stores data in a named volume. Set POSTGRES_PASSWORD and APP_DB_PASSWORD before setup to override demonstration passwords; copy .env.example to .env for persistent local configuration. `PGPASSWORD` is the migration administrator password; the API independently uses APP_DB_USER/APP_DB_PASSWORD or DATABASE_URL. Do not configure the API with administrator credentials. For TCP verification, export PGHOST, PGPORT, PGUSER, PGPASSWORD and APP_DB_PASSWORD in the shell as shown; `scripts/db-env.sh` is the private socket helper. Compose is provided but was not executed on this WSL host because Docker integration is unavailable.
+
+## Demonstrate the application
+
+1. **Users:** create an employee in Computer Science.
+2. **Roles & permissions:** create a role, select the employee, assign the role, select that role and grant **Reporting Database · READ**.
+3. **Access evaluation:** select the employee, Reporting Database and READ. Observe ALLOW, its reason and audit event ID.
+4. **Roles & permissions:** select the same employee and revoke that role.
+5. **Access evaluation:** repeat the same request. Observe DENY, then find both decisions in **Audit explorer**.
+
+Priya Sharma already has Reporting Database READ through multiple active roles; Aisha Bello is disabled, Chen Wei has no roles, Legacy Contractor is inactive, and Legacy Archive is an inactive resource. Seeded Rahul Verma has an ALLOW → revoke → DENY history. Every valid evaluation adds a distinct event; no core UI behavior is mocked.
+
+## Run verification
 
 ```bash
-./scripts/run-phase1-evidence.sh
+# All automated checks, executed SQL, benchmark and printable report:
+./scripts/verification/run-all.sh
+
+# Or individual checks:
+PGDATABASE=accessledger_test ./scripts/reset-db.sh
+PGDATABASE=accessledger_test .venv/bin/python -m pytest -v
+npm --prefix frontend run build
+PGDATABASE=accessledger_test_browser .venv/bin/python scripts/setup-db.py
+npm --prefix frontend test
 ```
 
-### Why the bootstrap script exists
+For browsers install once with `.venv/bin/python -m playwright install chromium` (Linux browser system libraries must be available). Current frontend and Python Playwright lock versions use Chromium revision 1248. The browser suite starts its own API/Vite servers on 8001/5174 and uses `accessledger_test_browser`; keep those ports free. Python tests refuse non-test databases. Only `accessledger_test*` and `accessledger_bench*` databases can be reset. No reset command targets the original or live demo database.
 
-This machine had no reachable PostgreSQL — no server package, Docker WSL
-integration disabled, and `sudo` requiring a password. `apt-get download` runs
-unprivileged and the Debian payloads are self-contained, so the script extracts
-PostgreSQL 16.15 into `.tools/postgres/` and runs the real server from there. It
-listens on a unix socket only (`listen_addresses = ''`), so the trust-authenticated
-cluster is never reachable off the machine.
+Capture genuine application screenshots while `scripts/dev.sh` is running with `.venv/bin/python scripts/verification/screenshots.py`. This performs two actual evaluations in the demo and records their events. Regenerate the printable report afterward with `.venv/bin/python scripts/verification/build-report.py`.
 
-This is also the reproducible-setup artifact Review 3 asks for: delete
-`.tools/` and `.pgdata/`, re-run the script, and the database is rebuilt from
-nothing.
+## Inspect SQL and the design
 
----
-
-## Layout
-
-```
-docs/
-  database-design.md      the eight relations, and every design decision
-  normalization.md        functional dependencies, 1NF → 3NF → BCNF
-  er-diagram.md           Crow's Foot ER diagram (Mermaid)
-  evidence/phase1-run.md  captured output of an actual run
-database/
-  schema/001_core_schema.sql   tables, keys, checks, integrity triggers
-  schema/002_views.sql         the five reporting views
-  seed/010_seed_demo.sql       synthetic demonstration data
-  queries/020..060             basic SQL, joins, aggregation, subqueries, views
-tests/database/                39 integrity tests against a real database
-scripts/                       bootstrap, env, reset, evidence capture
+```bash
+source scripts/db-env.sh
+psql -X -v ON_ERROR_STOP=1 -f database/queries/010_required_catalog.sql
+psql -X -v ON_ERROR_STOP=1 -f database/queries/020_basic_sql.sql
+psql -X -c 'SELECT * FROM generate_access_activity_summary();'
 ```
 
-`database/schema/*.sql` is the **authoritative** definition of the schema. When
-the backend arrives, SQLAlchemy models will be verified against it rather than
-defining it — two sources of truth for one schema is how they drift apart.
+Use `psql -v user_id=... -v permission_id=... -v department_id=...` to choose catalog parameters. Q13 also accepts `-v date_from=2026-10-01T00:00:00Z -v date_to=2026-11-01T00:00:00Z`; the default interval is the last seven days. The SQL-only baseline can be installed on a separately created empty demo/test database using `scripts/apply-sql.sh`; this is an alternative to Alembic, not a step before `setup-db.py`. It intentionally fails rather than overwriting populated schemas.
 
----
+- [Final academic report](docs/final-report.md) / [printable PDF](docs/final-report.pdf)
+- [Faculty requirement checklist](docs/requirements.md)
+- [ER diagram](docs/er-diagram.svg), [relational schema](docs/relational-schema.md), [normalization](docs/normalization.md)
+- [Architecture](docs/architecture.md), [transactions and concurrency](docs/transactions.md)
+- [Actual testing results](docs/testing.md), [measured indexing results](docs/indexing.md)
+- [Demonstration walkthrough](docs/demonstrations.md), [current evidence](docs/evidence/current)
 
-## The model
+## Database boundary
 
-Eight relations, two of them junctions:
+Exactly eight core relations: DEPARTMENT, APP_USER, ROLE, USER_ROLE, RESOURCE, PERMISSION, ROLE_PERMISSION and ACCESS_LOG. Alembic's version metadata lives separately in infrastructure. SQL files executed by versioned Alembic migrations are the single schema source; SQLAlchemy supplies Python connectivity rather than a second DDL definition. Verified revisions and their referenced SQL are immutable; future changes require another revision.
 
-```
-DEPARTMENT 1─* APP_USER
-APP_USER   1─* USER_ROLE      *─1 ROLE          ← user ↔ role
-ROLE       1─* ROLE_PERMISSION *─1 PERMISSION  ← role ↔ permission
-RESOURCE   1─* PERMISSION
-APP_USER   1─* ACCESS_LOG     *─1 PERMISSION
-```
+`evaluate_access(user_id, permission_id)` is the authoritative decision function. Valid references produce exactly one event; unknown references return DENY without a misleading log row. The API commits before returning a successful result. Application clients cannot supply a decision/reason or directly insert audit rows. Shared advisory transaction locks allow simultaneous evaluations; exclusive locks serialize all controlled policy changes against evaluations under READ COMMITTED.
 
-A permission is one action on one resource, uniquely identified by
-`(resource_id, action_code)`. `ACCESS_LOG` reaches its resource through
-`PERMISSION` rather than storing `resource_id` a second time.
+Append-only triggers protect logs; a separate trigger freezes logged permission resource/action identities. Deactivation and revocation preserve old decisions. Joined names/departments are current labels, not historical snapshots. The generated decision column prevents inconsistent reason/decision pairs, but its functional dependency remains an explicitly documented 3NF/BCNF exception.
 
-An attempt is **allowed** only when the user is active, the resource is active,
-and at least one active role assigned to that user carries the permission.
-Otherwise it is **denied** — default deny.
-
----
-
-## Two decisions worth knowing about
-
-**`access_log.decision` is generated, not supplied.** `reason_code` is the
-controlled vocabulary, and `ALLOW` is exactly what `PERMISSION_GRANTED` means, so
-PostgreSQL computes one from the other:
-
-```sql
-decision VARCHAR(5) GENERATED ALWAYS AS
-    (CASE WHEN reason_code = 'PERMISSION_GRANTED' THEN 'ALLOW' ELSE 'DENY' END) STORED
-```
-
-Impossible pairs such as `ALLOW` + `USER_DISABLED` cannot be stored, and the
-caller cannot pick the outcome. The cost is a strict BCNF violation
-(`reason_code → decision`, and `reason_code` is not a superkey) that is inherited
-from the specified design and is analysed in
-[`docs/normalization.md`](docs/normalization.md) §6.
-
-**Audit events are append-only, in two layers.** A trigger refuses `UPDATE`,
-`DELETE` and `TRUNCATE` on `access_log` — including for the table owner, whom
-privileges do not constrain — and the `accessledger_app` role is granted only
-`SELECT, INSERT` on it. This stops ordinary and privileged mistakes; it does not
-stop a superuser who drops the trigger. [`docs/database-design.md`](docs/database-design.md) §4.6
-records that limit rather than overclaiming.
-
----
-
-## Deliberately not built
-
-Role inheritance, direct user→permission grants, explicit deny rules, access
-request/approval workflows, multi-tenancy, SSO — each excluded by the Review 1
-scope. Each would add a ninth entity or duplicate an existing fact. Adding one
-later means a schema change, which is why they are listed rather than left
-available.
+This is a trusted local academic authorization demonstration. It has no production authentication, administrator authorization, external IAM or enforcement on real resources. The socket-only private cluster trusts local users; a database superuser can bypass triggers. These are documented boundaries, not claims of production readiness.

@@ -10,7 +10,7 @@ root = Path(__file__).resolve().parents[2]
 name = os.getenv('PGDATABASE', 'accessledger_demo')
 if not (name == 'accessledger_demo' or name.startswith(('accessledger_test','accessledger_bench'))):
     raise RuntimeError('Migrations only target dedicated demo/test/benchmark databases')
-url = os.getenv('MIGRATION_DATABASE_URL') or URL.create('postgresql+psycopg',
+url = URL.create('postgresql+psycopg',
     username=os.getenv('PGUSER','postgres'), password=os.getenv('PGPASSWORD'),
     host=os.getenv('PGHOST',str(root/'.pgsock')),port=int(os.getenv('PGPORT','55432')),database=name)
 engine=create_engine(url)

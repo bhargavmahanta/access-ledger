@@ -1,0 +1,803 @@
+{
+  "captured_utc": "2026-10-22T14:13:32.043554+00:00",
+  "database": "accessledger_test_evidence",
+  "server": "PostgreSQL 16.15 (Ubuntu 16.15-0ubuntu0.24.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0, 64-bit",
+  "seed_counts": {
+    "department": 10,
+    "app_user": 20,
+    "role": 10,
+    "user_role": 34,
+    "resource": 12,
+    "permission": 33,
+    "role_permission": 62,
+    "access_log": 120
+  },
+  "columns": [
+    {
+      "table_name": "access_log",
+      "column_name": "log_id",
+      "data_type": "integer",
+      "is_nullable": "NO",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "access_log",
+      "column_name": "user_id",
+      "data_type": "integer",
+      "is_nullable": "NO",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "access_log",
+      "column_name": "permission_id",
+      "data_type": "integer",
+      "is_nullable": "NO",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "access_log",
+      "column_name": "occurred_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO",
+      "column_default": "now()",
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "access_log",
+      "column_name": "decision",
+      "data_type": "character varying",
+      "is_nullable": "NO",
+      "column_default": null,
+      "is_generated": "ALWAYS"
+    },
+    {
+      "table_name": "access_log",
+      "column_name": "reason_code",
+      "data_type": "character varying",
+      "is_nullable": "NO",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "app_user",
+      "column_name": "user_id",
+      "data_type": "integer",
+      "is_nullable": "NO",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "app_user",
+      "column_name": "department_id",
+      "data_type": "integer",
+      "is_nullable": "NO",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "app_user",
+      "column_name": "full_name",
+      "data_type": "character varying",
+      "is_nullable": "NO",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "app_user",
+      "column_name": "email",
+      "data_type": "character varying",
+      "is_nullable": "NO",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "app_user",
+      "column_name": "status",
+      "data_type": "character varying",
+      "is_nullable": "NO",
+      "column_default": "'ACTIVE'::character varying",
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "department",
+      "column_name": "department_id",
+      "data_type": "integer",
+      "is_nullable": "NO",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "department",
+      "column_name": "department_name",
+      "data_type": "character varying",
+      "is_nullable": "NO",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "permission",
+      "column_name": "permission_id",
+      "data_type": "integer",
+      "is_nullable": "NO",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "permission",
+      "column_name": "resource_id",
+      "data_type": "integer",
+      "is_nullable": "NO",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "permission",
+      "column_name": "action_code",
+      "data_type": "character varying",
+      "is_nullable": "NO",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "resource",
+      "column_name": "resource_id",
+      "data_type": "integer",
+      "is_nullable": "NO",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "resource",
+      "column_name": "resource_code",
+      "data_type": "character varying",
+      "is_nullable": "NO",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "resource",
+      "column_name": "name",
+      "data_type": "character varying",
+      "is_nullable": "NO",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "resource",
+      "column_name": "type",
+      "data_type": "character varying",
+      "is_nullable": "NO",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "resource",
+      "column_name": "is_active",
+      "data_type": "boolean",
+      "is_nullable": "NO",
+      "column_default": "true",
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "role",
+      "column_name": "role_id",
+      "data_type": "integer",
+      "is_nullable": "NO",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "role",
+      "column_name": "role_name",
+      "data_type": "character varying",
+      "is_nullable": "NO",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "role",
+      "column_name": "is_active",
+      "data_type": "boolean",
+      "is_nullable": "NO",
+      "column_default": "true",
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "role_permission",
+      "column_name": "role_id",
+      "data_type": "integer",
+      "is_nullable": "NO",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "role_permission",
+      "column_name": "permission_id",
+      "data_type": "integer",
+      "is_nullable": "NO",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "role_permission",
+      "column_name": "granted_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO",
+      "column_default": "now()",
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "user_role",
+      "column_name": "user_id",
+      "data_type": "integer",
+      "is_nullable": "NO",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "user_role",
+      "column_name": "role_id",
+      "data_type": "integer",
+      "is_nullable": "NO",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "user_role",
+      "column_name": "assigned_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "NO",
+      "column_default": "now()",
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "vw_access_audit_history",
+      "column_name": "log_id",
+      "data_type": "integer",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "vw_access_audit_history",
+      "column_name": "occurred_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "vw_access_audit_history",
+      "column_name": "decision",
+      "data_type": "character varying",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "vw_access_audit_history",
+      "column_name": "reason_code",
+      "data_type": "character varying",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "vw_access_audit_history",
+      "column_name": "user_id",
+      "data_type": "integer",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "vw_access_audit_history",
+      "column_name": "email",
+      "data_type": "character varying",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "vw_access_audit_history",
+      "column_name": "full_name",
+      "data_type": "character varying",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "vw_access_audit_history",
+      "column_name": "department_name",
+      "data_type": "character varying",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "vw_access_audit_history",
+      "column_name": "permission_id",
+      "data_type": "integer",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "vw_access_audit_history",
+      "column_name": "resource_id",
+      "data_type": "integer",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "vw_access_audit_history",
+      "column_name": "resource_code",
+      "data_type": "character varying",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "vw_access_audit_history",
+      "column_name": "resource_name",
+      "data_type": "character varying",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "vw_access_audit_history",
+      "column_name": "resource_type",
+      "data_type": "character varying",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "vw_access_audit_history",
+      "column_name": "action_code",
+      "data_type": "character varying",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "vw_active_users_with_roles",
+      "column_name": "user_id",
+      "data_type": "integer",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "vw_active_users_with_roles",
+      "column_name": "full_name",
+      "data_type": "character varying",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "vw_active_users_with_roles",
+      "column_name": "email",
+      "data_type": "character varying",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "vw_active_users_with_roles",
+      "column_name": "department_id",
+      "data_type": "integer",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "vw_active_users_with_roles",
+      "column_name": "department_name",
+      "data_type": "character varying",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "vw_active_users_with_roles",
+      "column_name": "role_id",
+      "data_type": "integer",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "vw_active_users_with_roles",
+      "column_name": "role_name",
+      "data_type": "character varying",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "vw_denied_access_attempts",
+      "column_name": "log_id",
+      "data_type": "integer",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "vw_denied_access_attempts",
+      "column_name": "occurred_at",
+      "data_type": "timestamp with time zone",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "vw_denied_access_attempts",
+      "column_name": "decision",
+      "data_type": "character varying",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "vw_denied_access_attempts",
+      "column_name": "reason_code",
+      "data_type": "character varying",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "vw_denied_access_attempts",
+      "column_name": "user_id",
+      "data_type": "integer",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "vw_denied_access_attempts",
+      "column_name": "email",
+      "data_type": "character varying",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "vw_denied_access_attempts",
+      "column_name": "full_name",
+      "data_type": "character varying",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "vw_denied_access_attempts",
+      "column_name": "department_name",
+      "data_type": "character varying",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "vw_denied_access_attempts",
+      "column_name": "permission_id",
+      "data_type": "integer",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "vw_denied_access_attempts",
+      "column_name": "resource_id",
+      "data_type": "integer",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "vw_denied_access_attempts",
+      "column_name": "resource_code",
+      "data_type": "character varying",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "vw_denied_access_attempts",
+      "column_name": "resource_name",
+      "data_type": "character varying",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "vw_denied_access_attempts",
+      "column_name": "resource_type",
+      "data_type": "character varying",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "vw_denied_access_attempts",
+      "column_name": "action_code",
+      "data_type": "character varying",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "vw_denied_access_summary",
+      "column_name": "user_id",
+      "data_type": "integer",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "vw_denied_access_summary",
+      "column_name": "full_name",
+      "data_type": "character varying",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "vw_denied_access_summary",
+      "column_name": "denied_attempts",
+      "data_type": "bigint",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "vw_effective_user_permissions",
+      "column_name": "user_id",
+      "data_type": "integer",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "vw_effective_user_permissions",
+      "column_name": "email",
+      "data_type": "character varying",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "vw_effective_user_permissions",
+      "column_name": "full_name",
+      "data_type": "character varying",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "vw_effective_user_permissions",
+      "column_name": "permission_id",
+      "data_type": "integer",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "vw_effective_user_permissions",
+      "column_name": "resource_id",
+      "data_type": "integer",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "vw_effective_user_permissions",
+      "column_name": "resource_code",
+      "data_type": "character varying",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "vw_effective_user_permissions",
+      "column_name": "resource_name",
+      "data_type": "character varying",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "vw_effective_user_permissions",
+      "column_name": "resource_type",
+      "data_type": "character varying",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "vw_effective_user_permissions",
+      "column_name": "action_code",
+      "data_type": "character varying",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "vw_resource_access_summary",
+      "column_name": "resource_id",
+      "data_type": "integer",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "vw_resource_access_summary",
+      "column_name": "resource_code",
+      "data_type": "character varying",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "vw_resource_access_summary",
+      "column_name": "resource_name",
+      "data_type": "character varying",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "vw_resource_access_summary",
+      "column_name": "resource_type",
+      "data_type": "character varying",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "vw_resource_access_summary",
+      "column_name": "is_active",
+      "data_type": "boolean",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "vw_resource_access_summary",
+      "column_name": "defined_actions",
+      "data_type": "bigint",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "vw_resource_access_summary",
+      "column_name": "roles_referencing",
+      "data_type": "bigint",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "vw_resource_access_summary",
+      "column_name": "users_with_any_role_path",
+      "data_type": "bigint",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "vw_resource_access_summary",
+      "column_name": "attempts",
+      "data_type": "bigint",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER"
+    },
+    {
+      "table_name": "vw_resource_access_summary",
+      "column_name": "denied",
+      "data_type": "bigint",
+      "is_nullable": "YES",
+      "column_default": null,
+      "is_generated": "NEVER"
+    }
+  ],
+  "routines": [
+    {
+      "routine_name": "access_log_is_append_only",
+      "routine_type": "FUNCTION"
+    },
+    {
+      "routine_name": "assign_user_role",
+      "routine_type": "PROCEDURE"
+    },
+    {
+      "routine_name": "create_department",
+      "routine_type": "FUNCTION"
+    },
+    {
+      "routine_name": "create_permission",
+      "routine_type": "FUNCTION"
+    },
+    {
+      "routine_name": "create_resource",
+      "routine_type": "FUNCTION"
+    },
+    {
+      "routine_name": "create_role",
+      "routine_type": "FUNCTION"
+    },
+    {
+      "routine_name": "create_user",
+      "routine_type": "FUNCTION"
+    },
+    {
+      "routine_name": "evaluate_access",
+      "routine_type": "FUNCTION"
+    },
+    {
+      "routine_name": "generate_access_activity_summary",
+      "routine_type": "FUNCTION"
+    },
+    {
+      "routine_name": "get_effective_permissions",
+      "routine_type": "FUNCTION"
+    },
+    {
+      "routine_name": "grant_role_permission",
+      "routine_type": "PROCEDURE"
+    },
+    {
+      "routine_name": "normalize_app_user_email",
+      "routine_type": "FUNCTION"
+    },
+    {
+      "routine_name": "permission_meaning_is_frozen",
+      "routine_type": "FUNCTION"
+    },
+    {
+      "routine_name": "policy_lock",
+      "routine_type": "FUNCTION"
+    },
+    {
+      "routine_name": "revoke_role_permission",
+      "routine_type": "PROCEDURE"
+    },
+    {
+      "routine_name": "revoke_user_role",
+      "routine_type": "PROCEDURE"
+    },
+    {
+      "routine_name": "set_resource_active",
+      "routine_type": "PROCEDURE"
+    },
+    {
+      "routine_name": "set_role_active",
+      "routine_type": "PROCEDURE"
+    },
+    {
+      "routine_name": "set_user_status",
+      "routine_type": "PROCEDURE"
+    },
+    {
+      "routine_name": "update_department",
+      "routine_type": "PROCEDURE"
+    },
+    {
+      "routine_name": "update_permission_identity",
+      "routine_type": "PROCEDURE"
+    },
+    {
+      "routine_name": "update_user",
+      "routine_type": "PROCEDURE"
+    }
+  ]
+}

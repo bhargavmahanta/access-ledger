@@ -65,3 +65,41 @@ def test_invalid_references_and_date_validation(client):
     assert client.get('/api/v1/audit?date_from=2027-01-01T00:00:00Z&date_to=2026-01-01T00:00:00Z').status_code==422
     assert client.get('/api/v1/users?limit=0').status_code==422
     assert client.patch('/api/v1/roles/999999',json={'is_active':False}).status_code==404
+
+
+def test_failed_commit_does_not_return_allow(client):
+    from tests.database.test_engine import connect
+    with connect() as c:
+        c.execute("CREATE FUNCTION test_commit_failure() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN RAISE EXCEPTION 'injected commit failure'; END $$")
+        c.execute('CREATE CONSTRAINT TRIGGER test_deferred_audit_failure AFTER INSERT ON access_log DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION test_commit_failure()')
+        before=c.execute('SELECT count(*) n FROM access_log').fetchone()['n']
+        uid=c.execute("SELECT user_id FROM app_user WHERE email='priya.sharma@uni.edu'").fetchone()['user_id']
+        pid=c.execute("SELECT permission_id FROM permission p JOIN resource r USING(resource_id) WHERE resource_code='RES-DB-01' AND action_code='READ'").fetchone()['permission_id']
+    try:
+        result=client.post('/api/v1/evaluations',json={'user_id':uid,'permission_id':pid})
+        assert result.status_code==500 and 'decision' not in result.json()
+        with connect() as c:
+            assert c.execute('SELECT count(*) n FROM access_log').fetchone()['n']==before
+    finally:
+        with connect() as c:
+            c.execute('DROP TRIGGER test_deferred_audit_failure ON access_log')
+            c.execute('DROP FUNCTION test_commit_failure()')
+
+
+def test_database_unavailable_returns_503(client,monkeypatch):
+    from sqlalchemy import create_engine
+    from backend.app import db
+    broken=create_engine('postgresql+psycopg://nobody@127.0.0.1:1/accessledger_test',connect_args={'connect_timeout':1})
+    monkeypatch.setattr(db,'engine',broken)
+    assert client.get('/api/v1/reports/dashboard').status_code==503
+    broken.dispose()
+
+
+def test_filtered_date_range_and_aggregate_match(client):
+    query='user_id=1&date_from=2000-01-01T00:00:00Z&date_to=2100-01-01T00:00:00Z'
+    logs=client.get('/api/v1/audit?'+query).json()
+    summary=client.get('/api/v1/reports/audit-summary?'+query).json()
+    assert logs['total']==summary['total_events']==summary['allow_count']+summary['deny_count']
+    assert client.get('/api/v1/reports/activity?limit=1').json()['items'][0]['total_attempts']>=0
+    assert client.get('/api/v1/reports/users-without-permissions').status_code==200
+    assert client.get('/api/v1/reports/sensitive-permissions').status_code==200

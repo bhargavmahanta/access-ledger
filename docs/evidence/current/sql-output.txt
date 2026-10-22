@@ -1,0 +1,1561 @@
+Executed UTC: 2026-10-22T14:13:32.043554+00:00
+Database: accessledger_test_evidence
+Server: PostgreSQL 16.15 (Ubuntu 16.15-0ubuntu0.24.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0, 64-bit
+Seed counts: {"department": 10, "app_user": 20, "role": 10, "user_role": 34, "resource": 12, "permission": 33, "role_permission": 62, "access_log": 120}
+
+
+SOURCE: database/queries/010_required_catalog.sql
+Q01 Active employees
+ user_id |   full_name   |         email         
+---------+---------------+-----------------------
+       2 | Chen Wei      | chen.wei@uni.edu
+       3 | Daniel Okoye  | daniel.okoye@uni.edu
+       4 | Fatima Noor   | fatima.noor@uni.edu
+       5 | Jonas Weber   | jonas.weber@uni.edu
+       6 | Mei Lin Chen  | mei.chen@uni.edu
+       7 | Priya Sharma  | priya.sharma@uni.edu
+       8 | Tomas Alvarez | tomas.alvarez@uni.edu
+       9 | Rahul Verma   | rahul.verma@uni.edu
+      10 | Nora Patel    | nora.patel@uni.edu
+      11 | Omar Hassan   | omar.hassan@uni.edu
+      12 | Elena Rossi   | elena.rossi@uni.edu
+      13 | Lucas Silva   | lucas.silva@uni.edu
+      14 | Hana Kim      | hana.kim@uni.edu
+      15 | Arjun Rao     | arjun.rao@uni.edu
+      16 | Sofia Garcia  | sofia.garcia@uni.edu
+      17 | Noah Brown    | noah.brown@uni.edu
+      18 | Leila Khan    | leila.khan@uni.edu
+      19 | Maya Das      | maya.das@uni.edu
+      20 | Ethan Lee     | ethan.lee@uni.edu
+(19 rows)
+
+Q02 Employees by department
+ department_name  |  full_name   |        email         
+------------------+--------------+----------------------
+ Computer Science | Daniel Okoye | daniel.okoye@uni.edu
+ Computer Science | Jonas Weber  | jonas.weber@uni.edu
+ Computer Science | Priya Sharma | priya.sharma@uni.edu
+ Computer Science | Nora Patel   | nora.patel@uni.edu
+ Computer Science | Ethan Lee    | ethan.lee@uni.edu
+(5 rows)
+
+Q03 Users and assigned roles, including users with no roles
+   full_name   |     role_name     
+---------------+-------------------
+ Aisha Bello   | Analyst
+ Chen Wei      | 
+ Daniel Okoye  | Auditor
+ Fatima Noor   | Viewer
+ Jonas Weber   | Viewer
+ Jonas Weber   | Auditor
+ Jonas Weber   | Legacy Contractor
+ Mei Lin Chen  | Analyst
+ Mei Lin Chen  | Administrator
+ Priya Sharma  | Viewer
+ Priya Sharma  | Analyst
+ Tomas Alvarez | Viewer
+ Rahul Verma   | 
+ Nora Patel    | Viewer
+ Nora Patel    | Analyst
+ Omar Hassan   | Viewer
+ Omar Hassan   | Analyst
+ Elena Rossi   | Viewer
+ Elena Rossi   | Analyst
+ Lucas Silva   | Viewer
+ Lucas Silva   | Analyst
+ Hana Kim      | Viewer
+ Hana Kim      | Analyst
+ Arjun Rao     | Viewer
+ Arjun Rao     | Analyst
+ Sofia Garcia  | Viewer
+ Sofia Garcia  | Analyst
+ Noah Brown    | Viewer
+ Noah Brown    | Analyst
+ Leila Khan    | Viewer
+ Leila Khan    | Analyst
+ Maya Das      | Viewer
+ Maya Das      | Analyst
+ Ethan Lee     | Viewer
+ Ethan Lee     | Analyst
+ Ethan Lee     | Intern
+(36 rows)
+
+Q04 Active assigned roles for selected user
+ role_id | role_name 
+---------+-----------
+       1 | Viewer
+       2 | Analyst
+(2 rows)
+
+Q05 Resource-specific role permissions
+       role_name        | resource_code | action_code 
+------------------------+---------------+-------------
+ Viewer                 | RES-DB-01     | READ
+ Viewer                 | RES-APP-02    | READ
+ Viewer                 | RES-DOC-04    | READ
+ Analyst                | RES-DB-01     | READ
+ Analyst                | RES-DB-01     | WRITE
+ Analyst                | RES-APP-02    | EXECUTE
+ Analyst                | RES-SRV-03    | READ
+ Auditor                | RES-DB-01     | READ
+ Auditor                | RES-SRV-03    | READ
+ Auditor                | RES-DOC-04    | READ
+ Administrator          | RES-DB-01     | ADMIN
+ Administrator          | RES-DB-01     | READ
+ Administrator          | RES-DB-01     | WRITE
+ Administrator          | RES-APP-02    | EXECUTE
+ Administrator          | RES-APP-02    | READ
+ Administrator          | RES-SRV-03    | EXECUTE
+ Administrator          | RES-SRV-03    | READ
+ Administrator          | RES-SRV-03    | WRITE
+ Administrator          | RES-DOC-04    | READ
+ Administrator          | RES-05        | READ
+ Administrator          | RES-05        | WRITE
+ Administrator          | RES-05        | EXECUTE
+ Administrator          | RES-06        | READ
+ Administrator          | RES-06        | WRITE
+ Administrator          | RES-06        | EXECUTE
+ Administrator          | RES-07        | READ
+ Administrator          | RES-07        | WRITE
+ Administrator          | RES-07        | EXECUTE
+ Administrator          | RES-08        | READ
+ Administrator          | RES-08        | WRITE
+ Administrator          | RES-08        | EXECUTE
+ Administrator          | RES-09        | READ
+ Administrator          | RES-09        | WRITE
+ Administrator          | RES-09        | EXECUTE
+ Administrator          | RES-10        | READ
+ Administrator          | RES-10        | WRITE
+ Administrator          | RES-10        | EXECUTE
+ Administrator          | RES-11        | READ
+ Administrator          | RES-11        | WRITE
+ Administrator          | RES-11        | EXECUTE
+ Administrator          | RES-12        | READ
+ Administrator          | RES-12        | WRITE
+ Administrator          | RES-12        | EXECUTE
+ Legacy Contractor      | RES-DB-01     | READ
+ Legacy Contractor      | RES-SRV-03    | READ
+ Developer              | RES-APP-02    | EXECUTE
+ Developer              | RES-APP-02    | READ
+ Database Administrator | RES-DB-01     | ADMIN
+ Database Administrator | RES-DB-01     | READ
+ Database Administrator | RES-DB-01     | WRITE
+ Database Administrator | RES-05        | READ
+ Database Administrator | RES-05        | WRITE
+ Database Administrator | RES-05        | EXECUTE
+ Database Administrator | RES-09        | READ
+ Database Administrator | RES-09        | WRITE
+ Database Administrator | RES-09        | EXECUTE
+ HR Manager             | RES-05        | READ
+ HR Manager             | RES-05        | WRITE
+ HR Manager             | RES-05        | EXECUTE
+ Finance Analyst        | RES-SRV-03    | EXECUTE
+ Finance Analyst        | RES-SRV-03    | READ
+ Finance Analyst        | RES-SRV-03    | WRITE
+(62 rows)
+
+Q06 Distinct effective permissions
+ permission_id | resource_id | resource_code |    resource_name     | action_code 
+---------------+-------------+---------------+----------------------+-------------
+             3 |           1 | RES-DB-01     | Reporting Database   | WRITE
+             5 |           2 | RES-APP-02    | Internal Application | READ
+             2 |           1 | RES-DB-01     | Reporting Database   | READ
+             4 |           2 | RES-APP-02    | Internal Application | EXECUTE
+             7 |           3 | RES-SRV-03    | Finance Server       | READ
+(5 rows)
+
+Q07 Users per role, including empty roles
+       role_name        | users 
+------------------------+-------
+ Viewer                 |    15
+ Analyst                |    14
+ Auditor                |     2
+ Administrator          |     1
+ Legacy Contractor      |     1
+ Developer              |     0
+ Database Administrator |     0
+ HR Manager             |     0
+ Finance Analyst        |     0
+ Intern                 |     1
+(10 rows)
+
+Q08 Roles held by more than two users
+ role_name | users 
+-----------+-------
+ Viewer    |    15
+ Analyst   |    14
+(2 rows)
+
+Q09 Users without assigned roles (subquery)
+ user_id |  full_name  
+---------+-------------
+       2 | Chen Wei
+       9 | Rahul Verma
+(2 rows)
+
+Q10 Denied access attempts
+ log_id |          occurred_at          | decision |      reason_code       | user_id |         email         |   full_name   | department_name  | permission_id | resource_id | resource_code |    resource_name     | resource_type | action_code 
+--------+-------------------------------+----------+------------------------+---------+-----------------------+---------------+------------------+---------------+-------------+---------------+----------------------+---------------+-------------
+    120 | 2026-10-22 14:13:31.595551+00 | DENY     | PERMISSION_NOT_GRANTED |      18 | leila.khan@uni.edu    | Leila Khan    | Research         |            19 |           8 | RES-08        | Security Handbook    | DOCUMENT      | READ
+    119 | 2026-10-22 14:13:31.595454+00 | DENY     | PERMISSION_NOT_GRANTED |      17 | noah.brown@uni.edu    | Noah Brown    | Legal            |            18 |           7 | RES-07        | Build Server         | SERVER        | EXECUTE
+    118 | 2026-10-22 14:13:31.595358+00 | DENY     | PERMISSION_NOT_GRANTED |      16 | sofia.garcia@uni.edu  | Sofia Garcia  | Operations       |            17 |           7 | RES-07        | Build Server         | SERVER        | WRITE
+    117 | 2026-10-22 14:13:31.595257+00 | DENY     | PERMISSION_NOT_GRANTED |      15 | arjun.rao@uni.edu     | Arjun Rao     | Security         |            16 |           7 | RES-07        | Build Server         | SERVER        | READ
+    116 | 2026-10-22 14:13:31.595159+00 | DENY     | PERMISSION_NOT_GRANTED |      14 | hana.kim@uni.edu      | Hana Kim      | Engineering      |            15 |           6 | RES-06        | Deployment Console   | APPLICATION   | EXECUTE
+    115 | 2026-10-22 14:13:31.595062+00 | DENY     | PERMISSION_NOT_GRANTED |      13 | lucas.silva@uni.edu   | Lucas Silva   | Facilities       |            14 |           6 | RES-06        | Deployment Console   | APPLICATION   | WRITE
+    114 | 2026-10-22 14:13:31.594964+00 | DENY     | PERMISSION_NOT_GRANTED |      12 | elena.rossi@uni.edu   | Elena Rossi   | Human Resources  |            13 |           6 | RES-06        | Deployment Console   | APPLICATION   | READ
+    113 | 2026-10-22 14:13:31.594866+00 | DENY     | PERMISSION_NOT_GRANTED |      11 | omar.hassan@uni.edu   | Omar Hassan   | Finance          |            12 |           5 | RES-05        | Employee Directory   | DATABASE      | EXECUTE
+    112 | 2026-10-22 14:13:31.594768+00 | DENY     | PERMISSION_NOT_GRANTED |      10 | nora.patel@uni.edu    | Nora Patel    | Computer Science |            11 |           5 | RES-05        | Employee Directory   | DATABASE      | WRITE
+    111 | 2026-10-22 14:13:31.59467+00  | DENY     | NO_ACTIVE_ROLE         |       9 | rahul.verma@uni.edu   | Rahul Verma   | Support          |            10 |           5 | RES-05        | Employee Directory   | DATABASE      | READ
+    110 | 2026-10-22 14:13:31.594591+00 | DENY     | RESOURCE_INACTIVE      |       8 | tomas.alvarez@uni.edu | Tomas Alvarez | Human Resources  |             9 |           4 | RES-DOC-04    | Legacy Archive       | DOCUMENT      | READ
+    109 | 2026-10-22 14:13:31.594518+00 | DENY     | PERMISSION_NOT_GRANTED |       7 | priya.sharma@uni.edu  | Priya Sharma  | Computer Science |             8 |           3 | RES-SRV-03    | Finance Server       | SERVER        | WRITE
+    107 | 2026-10-22 14:13:31.594314+00 | DENY     | PERMISSION_NOT_GRANTED |       5 | jonas.weber@uni.edu   | Jonas Weber   | Computer Science |             6 |           3 | RES-SRV-03    | Finance Server       | SERVER        | EXECUTE
+    105 | 2026-10-22 14:13:31.594087+00 | DENY     | PERMISSION_NOT_GRANTED |       3 | daniel.okoye@uni.edu  | Daniel Okoye  | Computer Science |             4 |           2 | RES-APP-02    | Internal Application | APPLICATION   | EXECUTE
+    104 | 2026-10-22 14:13:31.593977+00 | DENY     | NO_ACTIVE_ROLE         |       2 | chen.wei@uni.edu      | Chen Wei      | Human Resources  |             3 |           1 | RES-DB-01     | Reporting Database   | DATABASE      | WRITE
+    103 | 2026-10-22 14:13:31.593883+00 | DENY     | USER_DISABLED          |       1 | aisha.bello@uni.edu   | Aisha Bello   | Finance          |             2 |           1 | RES-DB-01     | Reporting Database   | DATABASE      | READ
+    102 | 2026-10-22 14:13:31.593766+00 | DENY     | PERMISSION_NOT_GRANTED |      20 | ethan.lee@uni.edu     | Ethan Lee     | Computer Science |             1 |           1 | RES-DB-01     | Reporting Database   | DATABASE      | ADMIN
+    101 | 2026-10-22 14:13:31.593576+00 | DENY     | PERMISSION_NOT_GRANTED |      19 | maya.das@uni.edu      | Maya Das      | Support          |            33 |          12 | RES-12        | Policy Library       | DOCUMENT      | EXECUTE
+    100 | 2026-10-22 14:13:31.593405+00 | DENY     | PERMISSION_NOT_GRANTED |      18 | leila.khan@uni.edu    | Leila Khan    | Research         |            32 |          12 | RES-12        | Policy Library       | DOCUMENT      | WRITE
+     99 | 2026-10-22 14:13:31.585792+00 | DENY     | PERMISSION_NOT_GRANTED |      17 | noah.brown@uni.edu    | Noah Brown    | Legal            |            31 |          12 | RES-12        | Policy Library       | DOCUMENT      | READ
+     98 | 2026-10-22 14:13:31.585571+00 | DENY     | PERMISSION_NOT_GRANTED |      16 | sofia.garcia@uni.edu  | Sofia Garcia  | Operations       |            30 |          11 | RES-11        | Research Server      | SERVER        | EXECUTE
+     97 | 2026-10-22 14:13:31.585391+00 | DENY     | PERMISSION_NOT_GRANTED |      15 | arjun.rao@uni.edu     | Arjun Rao     | Security         |            29 |          11 | RES-11        | Research Server      | SERVER        | WRITE
+     96 | 2026-10-22 14:13:31.585157+00 | DENY     | PERMISSION_NOT_GRANTED |      14 | hana.kim@uni.edu      | Hana Kim      | Engineering      |            28 |          11 | RES-11        | Research Server      | SERVER        | READ
+     95 | 2026-10-22 14:13:31.58484+00  | DENY     | PERMISSION_NOT_GRANTED |      13 | lucas.silva@uni.edu   | Lucas Silva   | Facilities       |            27 |          10 | RES-10        | Support Portal       | APPLICATION   | EXECUTE
+     94 | 2026-10-22 14:13:31.584519+00 | DENY     | PERMISSION_NOT_GRANTED |      12 | elena.rossi@uni.edu   | Elena Rossi   | Human Resources  |            26 |          10 | RES-10        | Support Portal       | APPLICATION   | WRITE
+     93 | 2026-10-22 14:13:31.584364+00 | DENY     | PERMISSION_NOT_GRANTED |      11 | omar.hassan@uni.edu   | Omar Hassan   | Finance          |            25 |          10 | RES-10        | Support Portal       | APPLICATION   | READ
+     92 | 2026-10-22 14:13:31.584222+00 | DENY     | PERMISSION_NOT_GRANTED |      10 | nora.patel@uni.edu    | Nora Patel    | Computer Science |            24 |           9 | RES-09        | Payroll Database     | DATABASE      | EXECUTE
+     91 | 2026-10-22 14:13:31.584122+00 | DENY     | NO_ACTIVE_ROLE         |       9 | rahul.verma@uni.edu   | Rahul Verma   | Support          |            23 |           9 | RES-09        | Payroll Database     | DATABASE      | WRITE
+     90 | 2026-10-22 14:13:31.584043+00 | DENY     | PERMISSION_NOT_GRANTED |       8 | tomas.alvarez@uni.edu | Tomas Alvarez | Human Resources  |            22 |           9 | RES-09        | Payroll Database     | DATABASE      | READ
+     89 | 2026-10-22 14:13:31.583944+00 | DENY     | PERMISSION_NOT_GRANTED |       7 | priya.sharma@uni.edu  | Priya Sharma  | Computer Science |            21 |           8 | RES-08        | Security Handbook    | DOCUMENT      | EXECUTE
+     87 | 2026-10-22 14:13:31.583741+00 | DENY     | PERMISSION_NOT_GRANTED |       5 | jonas.weber@uni.edu   | Jonas Weber   | Computer Science |            19 |           8 | RES-08        | Security Handbook    | DOCUMENT      | READ
+     86 | 2026-10-22 14:13:31.583632+00 | DENY     | PERMISSION_NOT_GRANTED |       4 | fatima.noor@uni.edu   | Fatima Noor   | Facilities       |            18 |           7 | RES-07        | Build Server         | SERVER        | EXECUTE
+     85 | 2026-10-22 14:13:31.583527+00 | DENY     | PERMISSION_NOT_GRANTED |       3 | daniel.okoye@uni.edu  | Daniel Okoye  | Computer Science |            17 |           7 | RES-07        | Build Server         | SERVER        | WRITE
+     84 | 2026-10-22 14:13:31.583405+00 | DENY     | NO_ACTIVE_ROLE         |       2 | chen.wei@uni.edu      | Chen Wei      | Human Resources  |            16 |           7 | RES-07        | Build Server         | SERVER        | READ
+     83 | 2026-10-22 14:13:31.583299+00 | DENY     | USER_DISABLED          |       1 | aisha.bello@uni.edu   | Aisha Bello   | Finance          |            15 |           6 | RES-06        | Deployment Console   | APPLICATION   | EXECUTE
+     82 | 2026-10-22 14:13:31.583223+00 | DENY     | PERMISSION_NOT_GRANTED |      20 | ethan.lee@uni.edu     | Ethan Lee     | Computer Science |            14 |           6 | RES-06        | Deployment Console   | APPLICATION   | WRITE
+     81 | 2026-10-22 14:13:31.58312+00  | DENY     | PERMISSION_NOT_GRANTED |      19 | maya.das@uni.edu      | Maya Das      | Support          |            13 |           6 | RES-06        | Deployment Console   | APPLICATION   | READ
+     80 | 2026-10-22 14:13:31.583017+00 | DENY     | PERMISSION_NOT_GRANTED |      18 | leila.khan@uni.edu    | Leila Khan    | Research         |            12 |           5 | RES-05        | Employee Directory   | DATABASE      | EXECUTE
+     79 | 2026-10-22 14:13:31.582911+00 | DENY     | PERMISSION_NOT_GRANTED |      17 | noah.brown@uni.edu    | Noah Brown    | Legal            |            11 |           5 | RES-05        | Employee Directory   | DATABASE      | WRITE
+     78 | 2026-10-22 14:13:31.5828+00   | DENY     | PERMISSION_NOT_GRANTED |      16 | sofia.garcia@uni.edu  | Sofia Garcia  | Operations       |            10 |           5 | RES-05        | Employee Directory   | DATABASE      | READ
+     77 | 2026-10-22 14:13:31.582664+00 | DENY     | RESOURCE_INACTIVE      |      15 | arjun.rao@uni.edu     | Arjun Rao     | Security         |             9 |           4 | RES-DOC-04    | Legacy Archive       | DOCUMENT      | READ
+     76 | 2026-10-22 14:13:31.58256+00  | DENY     | PERMISSION_NOT_GRANTED |      14 | hana.kim@uni.edu      | Hana Kim      | Engineering      |             8 |           3 | RES-SRV-03    | Finance Server       | SERVER        | WRITE
+     74 | 2026-10-22 14:13:31.582343+00 | DENY     | PERMISSION_NOT_GRANTED |      12 | elena.rossi@uni.edu   | Elena Rossi   | Human Resources  |             6 |           3 | RES-SRV-03    | Finance Server       | SERVER        | EXECUTE
+     71 | 2026-10-22 14:13:31.582019+00 | DENY     | NO_ACTIVE_ROLE         |       9 | rahul.verma@uni.edu   | Rahul Verma   | Support          |             3 |           1 | RES-DB-01     | Reporting Database   | DATABASE      | WRITE
+     69 | 2026-10-22 14:13:31.581826+00 | DENY     | PERMISSION_NOT_GRANTED |       7 | priya.sharma@uni.edu  | Priya Sharma  | Computer Science |             1 |           1 | RES-DB-01     | Reporting Database   | DATABASE      | ADMIN
+     67 | 2026-10-22 14:13:31.581605+00 | DENY     | PERMISSION_NOT_GRANTED |       5 | jonas.weber@uni.edu   | Jonas Weber   | Computer Science |            32 |          12 | RES-12        | Policy Library       | DOCUMENT      | WRITE
+     66 | 2026-10-22 14:13:31.581482+00 | DENY     | PERMISSION_NOT_GRANTED |       4 | fatima.noor@uni.edu   | Fatima Noor   | Facilities       |            31 |          12 | RES-12        | Policy Library       | DOCUMENT      | READ
+     65 | 2026-10-22 14:13:31.581346+00 | DENY     | PERMISSION_NOT_GRANTED |       3 | daniel.okoye@uni.edu  | Daniel Okoye  | Computer Science |            30 |          11 | RES-11        | Research Server      | SERVER        | EXECUTE
+     64 | 2026-10-22 14:13:31.581221+00 | DENY     | NO_ACTIVE_ROLE         |       2 | chen.wei@uni.edu      | Chen Wei      | Human Resources  |            29 |          11 | RES-11        | Research Server      | SERVER        | WRITE
+     63 | 2026-10-22 14:13:31.581141+00 | DENY     | USER_DISABLED          |       1 | aisha.bello@uni.edu   | Aisha Bello   | Finance          |            28 |          11 | RES-11        | Research Server      | SERVER        | READ
+     62 | 2026-10-22 14:13:31.581068+00 | DENY     | PERMISSION_NOT_GRANTED |      20 | ethan.lee@uni.edu     | Ethan Lee     | Computer Science |            27 |          10 | RES-10        | Support Portal       | APPLICATION   | EXECUTE
+     61 | 2026-10-22 14:13:31.580963+00 | DENY     | PERMISSION_NOT_GRANTED |      19 | maya.das@uni.edu      | Maya Das      | Support          |            26 |          10 | RES-10        | Support Portal       | APPLICATION   | WRITE
+     60 | 2026-10-22 14:13:31.580861+00 | DENY     | PERMISSION_NOT_GRANTED |      18 | leila.khan@uni.edu    | Leila Khan    | Research         |            25 |          10 | RES-10        | Support Portal       | APPLICATION   | READ
+     59 | 2026-10-22 14:13:31.580755+00 | DENY     | PERMISSION_NOT_GRANTED |      17 | noah.brown@uni.edu    | Noah Brown    | Legal            |            24 |           9 | RES-09        | Payroll Database     | DATABASE      | EXECUTE
+     58 | 2026-10-22 14:13:31.580624+00 | DENY     | PERMISSION_NOT_GRANTED |      16 | sofia.garcia@uni.edu  | Sofia Garcia  | Operations       |            23 |           9 | RES-09        | Payroll Database     | DATABASE      | WRITE
+     57 | 2026-10-22 14:13:31.580522+00 | DENY     | PERMISSION_NOT_GRANTED |      15 | arjun.rao@uni.edu     | Arjun Rao     | Security         |            22 |           9 | RES-09        | Payroll Database     | DATABASE      | READ
+     56 | 2026-10-22 14:13:31.580418+00 | DENY     | PERMISSION_NOT_GRANTED |      14 | hana.kim@uni.edu      | Hana Kim      | Engineering      |            21 |           8 | RES-08        | Security Handbook    | DOCUMENT      | EXECUTE
+     55 | 2026-10-22 14:13:31.580317+00 | DENY     | PERMISSION_NOT_GRANTED |      13 | lucas.silva@uni.edu   | Lucas Silva   | Facilities       |            20 |           8 | RES-08        | Security Handbook    | DOCUMENT      | WRITE
+     54 | 2026-10-22 14:13:31.580217+00 | DENY     | PERMISSION_NOT_GRANTED |      12 | elena.rossi@uni.edu   | Elena Rossi   | Human Resources  |            19 |           8 | RES-08        | Security Handbook    | DOCUMENT      | READ
+     53 | 2026-10-22 14:13:31.580117+00 | DENY     | PERMISSION_NOT_GRANTED |      11 | omar.hassan@uni.edu   | Omar Hassan   | Finance          |            18 |           7 | RES-07        | Build Server         | SERVER        | EXECUTE
+     52 | 2026-10-22 14:13:31.580013+00 | DENY     | PERMISSION_NOT_GRANTED |      10 | nora.patel@uni.edu    | Nora Patel    | Computer Science |            17 |           7 | RES-07        | Build Server         | SERVER        | WRITE
+     51 | 2026-10-22 14:13:31.57991+00  | DENY     | NO_ACTIVE_ROLE         |       9 | rahul.verma@uni.edu   | Rahul Verma   | Support          |            16 |           7 | RES-07        | Build Server         | SERVER        | READ
+     50 | 2026-10-22 14:13:31.579826+00 | DENY     | PERMISSION_NOT_GRANTED |       8 | tomas.alvarez@uni.edu | Tomas Alvarez | Human Resources  |            15 |           6 | RES-06        | Deployment Console   | APPLICATION   | EXECUTE
+     49 | 2026-10-22 14:13:31.579725+00 | DENY     | PERMISSION_NOT_GRANTED |       7 | priya.sharma@uni.edu  | Priya Sharma  | Computer Science |            14 |           6 | RES-06        | Deployment Console   | APPLICATION   | WRITE
+     47 | 2026-10-22 14:13:31.579513+00 | DENY     | PERMISSION_NOT_GRANTED |       5 | jonas.weber@uni.edu   | Jonas Weber   | Computer Science |            12 |           5 | RES-05        | Employee Directory   | DATABASE      | EXECUTE
+     46 | 2026-10-22 14:13:31.579401+00 | DENY     | PERMISSION_NOT_GRANTED |       4 | fatima.noor@uni.edu   | Fatima Noor   | Facilities       |            11 |           5 | RES-05        | Employee Directory   | DATABASE      | WRITE
+     45 | 2026-10-22 14:13:31.579252+00 | DENY     | PERMISSION_NOT_GRANTED |       3 | daniel.okoye@uni.edu  | Daniel Okoye  | Computer Science |            10 |           5 | RES-05        | Employee Directory   | DATABASE      | READ
+     44 | 2026-10-22 14:13:31.579153+00 | DENY     | RESOURCE_INACTIVE      |       2 | chen.wei@uni.edu      | Chen Wei      | Human Resources  |             9 |           4 | RES-DOC-04    | Legacy Archive       | DOCUMENT      | READ
+     43 | 2026-10-22 14:13:31.579082+00 | DENY     | USER_DISABLED          |       1 | aisha.bello@uni.edu   | Aisha Bello   | Finance          |             8 |           3 | RES-SRV-03    | Finance Server       | SERVER        | WRITE
+     41 | 2026-10-22 14:13:31.578906+00 | DENY     | PERMISSION_NOT_GRANTED |      19 | maya.das@uni.edu      | Maya Das      | Support          |             6 |           3 | RES-SRV-03    | Finance Server       | SERVER        | EXECUTE
+     36 | 2026-10-22 14:13:31.578407+00 | DENY     | PERMISSION_NOT_GRANTED |      14 | hana.kim@uni.edu      | Hana Kim      | Engineering      |             1 |           1 | RES-DB-01     | Reporting Database   | DATABASE      | ADMIN
+     35 | 2026-10-22 14:13:31.578303+00 | DENY     | PERMISSION_NOT_GRANTED |      13 | lucas.silva@uni.edu   | Lucas Silva   | Facilities       |            33 |          12 | RES-12        | Policy Library       | DOCUMENT      | EXECUTE
+     34 | 2026-10-22 14:13:31.578201+00 | DENY     | PERMISSION_NOT_GRANTED |      12 | elena.rossi@uni.edu   | Elena Rossi   | Human Resources  |            32 |          12 | RES-12        | Policy Library       | DOCUMENT      | WRITE
+     33 | 2026-10-22 14:13:31.578097+00 | DENY     | PERMISSION_NOT_GRANTED |      11 | omar.hassan@uni.edu   | Omar Hassan   | Finance          |            31 |          12 | RES-12        | Policy Library       | DOCUMENT      | READ
+     32 | 2026-10-22 14:13:31.577987+00 | DENY     | PERMISSION_NOT_GRANTED |      10 | nora.patel@uni.edu    | Nora Patel    | Computer Science |            30 |          11 | RES-11        | Research Server      | SERVER        | EXECUTE
+     31 | 2026-10-22 14:13:31.577835+00 | DENY     | NO_ACTIVE_ROLE         |       9 | rahul.verma@uni.edu   | Rahul Verma   | Support          |            29 |          11 | RES-11        | Research Server      | SERVER        | WRITE
+     30 | 2026-10-22 14:13:31.577752+00 | DENY     | PERMISSION_NOT_GRANTED |       8 | tomas.alvarez@uni.edu | Tomas Alvarez | Human Resources  |            28 |          11 | RES-11        | Research Server      | SERVER        | READ
+     29 | 2026-10-22 14:13:31.577645+00 | DENY     | PERMISSION_NOT_GRANTED |       7 | priya.sharma@uni.edu  | Priya Sharma  | Computer Science |            27 |          10 | RES-10        | Support Portal       | APPLICATION   | EXECUTE
+     27 | 2026-10-22 14:13:31.577374+00 | DENY     | PERMISSION_NOT_GRANTED |       5 | jonas.weber@uni.edu   | Jonas Weber   | Computer Science |            25 |          10 | RES-10        | Support Portal       | APPLICATION   | READ
+     26 | 2026-10-22 14:13:31.57724+00  | DENY     | PERMISSION_NOT_GRANTED |       4 | fatima.noor@uni.edu   | Fatima Noor   | Facilities       |            24 |           9 | RES-09        | Payroll Database     | DATABASE      | EXECUTE
+     25 | 2026-10-22 14:13:31.577113+00 | DENY     | PERMISSION_NOT_GRANTED |       3 | daniel.okoye@uni.edu  | Daniel Okoye  | Computer Science |            23 |           9 | RES-09        | Payroll Database     | DATABASE      | WRITE
+     24 | 2026-10-22 14:13:31.577011+00 | DENY     | NO_ACTIVE_ROLE         |       2 | chen.wei@uni.edu      | Chen Wei      | Human Resources  |            22 |           9 | RES-09        | Payroll Database     | DATABASE      | READ
+     23 | 2026-10-22 14:13:31.576928+00 | DENY     | USER_DISABLED          |       1 | aisha.bello@uni.edu   | Aisha Bello   | Finance          |            21 |           8 | RES-08        | Security Handbook    | DOCUMENT      | EXECUTE
+     22 | 2026-10-22 14:13:31.576845+00 | DENY     | PERMISSION_NOT_GRANTED |      20 | ethan.lee@uni.edu     | Ethan Lee     | Computer Science |            20 |           8 | RES-08        | Security Handbook    | DOCUMENT      | WRITE
+     21 | 2026-10-22 14:13:31.576622+00 | DENY     | PERMISSION_NOT_GRANTED |      19 | maya.das@uni.edu      | Maya Das      | Support          |            19 |           8 | RES-08        | Security Handbook    | DOCUMENT      | READ
+     20 | 2026-10-22 14:13:31.576526+00 | DENY     | PERMISSION_NOT_GRANTED |      18 | leila.khan@uni.edu    | Leila Khan    | Research         |            18 |           7 | RES-07        | Build Server         | SERVER        | EXECUTE
+     19 | 2026-10-22 14:13:31.576429+00 | DENY     | PERMISSION_NOT_GRANTED |      17 | noah.brown@uni.edu    | Noah Brown    | Legal            |            17 |           7 | RES-07        | Build Server         | SERVER        | WRITE
+     18 | 2026-10-22 14:13:31.576332+00 | DENY     | PERMISSION_NOT_GRANTED |      16 | sofia.garcia@uni.edu  | Sofia Garcia  | Operations       |            16 |           7 | RES-07        | Build Server         | SERVER        | READ
+     17 | 2026-10-22 14:13:31.576235+00 | DENY     | PERMISSION_NOT_GRANTED |      15 | arjun.rao@uni.edu     | Arjun Rao     | Security         |            15 |           6 | RES-06        | Deployment Console   | APPLICATION   | EXECUTE
+     16 | 2026-10-22 14:13:31.576137+00 | DENY     | PERMISSION_NOT_GRANTED |      14 | hana.kim@uni.edu      | Hana Kim      | Engineering      |            14 |           6 | RES-06        | Deployment Console   | APPLICATION   | WRITE
+     15 | 2026-10-22 14:13:31.576032+00 | DENY     | PERMISSION_NOT_GRANTED |      13 | lucas.silva@uni.edu   | Lucas Silva   | Facilities       |            13 |           6 | RES-06        | Deployment Console   | APPLICATION   | READ
+     14 | 2026-10-22 14:13:31.575934+00 | DENY     | PERMISSION_NOT_GRANTED |      12 | elena.rossi@uni.edu   | Elena Rossi   | Human Resources  |            12 |           5 | RES-05        | Employee Directory   | DATABASE      | EXECUTE
+     13 | 2026-10-22 14:13:31.575832+00 | DENY     | PERMISSION_NOT_GRANTED |      11 | omar.hassan@uni.edu   | Omar Hassan   | Finance          |            11 |           5 | RES-05        | Employee Directory   | DATABASE      | WRITE
+     12 | 2026-10-22 14:13:31.575728+00 | DENY     | PERMISSION_NOT_GRANTED |      10 | nora.patel@uni.edu    | Nora Patel    | Computer Science |            10 |           5 | RES-05        | Employee Directory   | DATABASE      | READ
+     11 | 2026-10-22 14:13:31.575614+00 | DENY     | RESOURCE_INACTIVE      |       9 | rahul.verma@uni.edu   | Rahul Verma   | Support          |             9 |           4 | RES-DOC-04    | Legacy Archive       | DOCUMENT      | READ
+     10 | 2026-10-22 14:13:31.575494+00 | DENY     | PERMISSION_NOT_GRANTED |       8 | tomas.alvarez@uni.edu | Tomas Alvarez | Human Resources  |             8 |           3 | RES-SRV-03    | Finance Server       | SERVER        | WRITE
+      6 | 2026-10-22 14:13:31.573855+00 | DENY     | PERMISSION_NOT_GRANTED |       4 | fatima.noor@uni.edu   | Fatima Noor   | Facilities       |             4 |           2 | RES-APP-02    | Internal Application | APPLICATION   | EXECUTE
+      5 | 2026-10-22 14:13:31.5731+00   | DENY     | PERMISSION_NOT_GRANTED |       3 | daniel.okoye@uni.edu  | Daniel Okoye  | Computer Science |             3 |           1 | RES-DB-01     | Reporting Database   | DATABASE      | WRITE
+      4 | 2026-10-22 14:13:31.572308+00 | DENY     | NO_ACTIVE_ROLE         |       2 | chen.wei@uni.edu      | Chen Wei      | Human Resources  |             2 |           1 | RES-DB-01     | Reporting Database   | DATABASE      | READ
+      3 | 2026-10-22 14:13:31.571954+00 | DENY     | USER_DISABLED          |       1 | aisha.bello@uni.edu   | Aisha Bello   | Finance          |             1 |           1 | RES-DB-01     | Reporting Database   | DATABASE      | ADMIN
+      2 | 2026-10-22 14:13:31.571302+00 | DENY     | NO_ACTIVE_ROLE         |       9 | rahul.verma@uni.edu   | Rahul Verma   | Support          |             5 |           2 | RES-APP-02    | Internal Application | APPLICATION   | READ
+(101 rows)
+
+Q11 Denied attempts per user
+ user_id |   full_name   | denied_attempts 
+---------+---------------+-----------------
+       9 | Rahul Verma   |               7
+       1 | Aisha Bello   |               6
+       2 | Chen Wei      |               6
+       3 | Daniel Okoye  |               6
+      12 | Elena Rossi   |               6
+      14 | Hana Kim      |               6
+       4 | Fatima Noor   |               5
+       5 | Jonas Weber   |               5
+       7 | Priya Sharma  |               5
+       8 | Tomas Alvarez |               5
+      10 | Nora Patel    |               5
+      11 | Omar Hassan   |               5
+      13 | Lucas Silva   |               5
+      15 | Arjun Rao     |               5
+      16 | Sofia Garcia  |               5
+      17 | Noah Brown    |               5
+      18 | Leila Khan    |               5
+      19 | Maya Das      |               5
+      20 | Ethan Lee     |               4
+       6 | Mei Lin Chen  |               0
+(20 rows)
+
+Q12 Most frequently accessed resources
+ resource_code | attempts | denied 
+---------------+----------+--------
+ RES-DB-01     |       12 |      9
+ RES-SRV-03    |       12 |      7
+ RES-05        |       12 |     12
+ RES-06        |       12 |     11
+ RES-07        |       12 |     12
+ RES-APP-02    |       10 |      3
+ RES-08        |       10 |      9
+ RES-09        |        9 |      9
+ RES-10        |        9 |      8
+ RES-11        |        9 |      9
+ RES-12        |        9 |      8
+ RES-DOC-04    |        4 |      4
+(12 rows)
+
+Q13 Audit history in a selected interval (default: last seven days)
+ log_id |          occurred_at          | decision |      reason_code       | user_id |         email         |   full_name   | department_name  | permission_id | resource_id | resource_code |    resource_name     | resource_type | action_code 
+--------+-------------------------------+----------+------------------------+---------+-----------------------+---------------+------------------+---------------+-------------+---------------+----------------------+---------------+-------------
+      1 | 2026-10-22 14:13:31.549602+00 | ALLOW    | PERMISSION_GRANTED     |       9 | rahul.verma@uni.edu   | Rahul Verma   | Support          |             5 |           2 | RES-APP-02    | Internal Application | APPLICATION   | READ
+      2 | 2026-10-22 14:13:31.571302+00 | DENY     | NO_ACTIVE_ROLE         |       9 | rahul.verma@uni.edu   | Rahul Verma   | Support          |             5 |           2 | RES-APP-02    | Internal Application | APPLICATION   | READ
+      3 | 2026-10-22 14:13:31.571954+00 | DENY     | USER_DISABLED          |       1 | aisha.bello@uni.edu   | Aisha Bello   | Finance          |             1 |           1 | RES-DB-01     | Reporting Database   | DATABASE      | ADMIN
+      4 | 2026-10-22 14:13:31.572308+00 | DENY     | NO_ACTIVE_ROLE         |       2 | chen.wei@uni.edu      | Chen Wei      | Human Resources  |             2 |           1 | RES-DB-01     | Reporting Database   | DATABASE      | READ
+      5 | 2026-10-22 14:13:31.5731+00   | DENY     | PERMISSION_NOT_GRANTED |       3 | daniel.okoye@uni.edu  | Daniel Okoye  | Computer Science |             3 |           1 | RES-DB-01     | Reporting Database   | DATABASE      | WRITE
+      6 | 2026-10-22 14:13:31.573855+00 | DENY     | PERMISSION_NOT_GRANTED |       4 | fatima.noor@uni.edu   | Fatima Noor   | Facilities       |             4 |           2 | RES-APP-02    | Internal Application | APPLICATION   | EXECUTE
+      7 | 2026-10-22 14:13:31.574422+00 | ALLOW    | PERMISSION_GRANTED     |       5 | jonas.weber@uni.edu   | Jonas Weber   | Computer Science |             5 |           2 | RES-APP-02    | Internal Application | APPLICATION   | READ
+      8 | 2026-10-22 14:13:31.574858+00 | ALLOW    | PERMISSION_GRANTED     |       6 | mei.chen@uni.edu      | Mei Lin Chen  | Finance          |             6 |           3 | RES-SRV-03    | Finance Server       | SERVER        | EXECUTE
+      9 | 2026-10-22 14:13:31.57532+00  | ALLOW    | PERMISSION_GRANTED     |       7 | priya.sharma@uni.edu  | Priya Sharma  | Computer Science |             7 |           3 | RES-SRV-03    | Finance Server       | SERVER        | READ
+     10 | 2026-10-22 14:13:31.575494+00 | DENY     | PERMISSION_NOT_GRANTED |       8 | tomas.alvarez@uni.edu | Tomas Alvarez | Human Resources  |             8 |           3 | RES-SRV-03    | Finance Server       | SERVER        | WRITE
+     11 | 2026-10-22 14:13:31.575614+00 | DENY     | RESOURCE_INACTIVE      |       9 | rahul.verma@uni.edu   | Rahul Verma   | Support          |             9 |           4 | RES-DOC-04    | Legacy Archive       | DOCUMENT      | READ
+     12 | 2026-10-22 14:13:31.575728+00 | DENY     | PERMISSION_NOT_GRANTED |      10 | nora.patel@uni.edu    | Nora Patel    | Computer Science |            10 |           5 | RES-05        | Employee Directory   | DATABASE      | READ
+     13 | 2026-10-22 14:13:31.575832+00 | DENY     | PERMISSION_NOT_GRANTED |      11 | omar.hassan@uni.edu   | Omar Hassan   | Finance          |            11 |           5 | RES-05        | Employee Directory   | DATABASE      | WRITE
+     14 | 2026-10-22 14:13:31.575934+00 | DENY     | PERMISSION_NOT_GRANTED |      12 | elena.rossi@uni.edu   | Elena Rossi   | Human Resources  |            12 |           5 | RES-05        | Employee Directory   | DATABASE      | EXECUTE
+     15 | 2026-10-22 14:13:31.576032+00 | DENY     | PERMISSION_NOT_GRANTED |      13 | lucas.silva@uni.edu   | Lucas Silva   | Facilities       |            13 |           6 | RES-06        | Deployment Console   | APPLICATION   | READ
+     16 | 2026-10-22 14:13:31.576137+00 | DENY     | PERMISSION_NOT_GRANTED |      14 | hana.kim@uni.edu      | Hana Kim      | Engineering      |            14 |           6 | RES-06        | Deployment Console   | APPLICATION   | WRITE
+     17 | 2026-10-22 14:13:31.576235+00 | DENY     | PERMISSION_NOT_GRANTED |      15 | arjun.rao@uni.edu     | Arjun Rao     | Security         |            15 |           6 | RES-06        | Deployment Console   | APPLICATION   | EXECUTE
+     18 | 2026-10-22 14:13:31.576332+00 | DENY     | PERMISSION_NOT_GRANTED |      16 | sofia.garcia@uni.edu  | Sofia Garcia  | Operations       |            16 |           7 | RES-07        | Build Server         | SERVER        | READ
+     19 | 2026-10-22 14:13:31.576429+00 | DENY     | PERMISSION_NOT_GRANTED |      17 | noah.brown@uni.edu    | Noah Brown    | Legal            |            17 |           7 | RES-07        | Build Server         | SERVER        | WRITE
+     20 | 2026-10-22 14:13:31.576526+00 | DENY     | PERMISSION_NOT_GRANTED |      18 | leila.khan@uni.edu    | Leila Khan    | Research         |            18 |           7 | RES-07        | Build Server         | SERVER        | EXECUTE
+     21 | 2026-10-22 14:13:31.576622+00 | DENY     | PERMISSION_NOT_GRANTED |      19 | maya.das@uni.edu      | Maya Das      | Support          |            19 |           8 | RES-08        | Security Handbook    | DOCUMENT      | READ
+     22 | 2026-10-22 14:13:31.576845+00 | DENY     | PERMISSION_NOT_GRANTED |      20 | ethan.lee@uni.edu     | Ethan Lee     | Computer Science |            20 |           8 | RES-08        | Security Handbook    | DOCUMENT      | WRITE
+     23 | 2026-10-22 14:13:31.576928+00 | DENY     | USER_DISABLED          |       1 | aisha.bello@uni.edu   | Aisha Bello   | Finance          |            21 |           8 | RES-08        | Security Handbook    | DOCUMENT      | EXECUTE
+     24 | 2026-10-22 14:13:31.577011+00 | DENY     | NO_ACTIVE_ROLE         |       2 | chen.wei@uni.edu      | Chen Wei      | Human Resources  |            22 |           9 | RES-09        | Payroll Database     | DATABASE      | READ
+     25 | 2026-10-22 14:13:31.577113+00 | DENY     | PERMISSION_NOT_GRANTED |       3 | daniel.okoye@uni.edu  | Daniel Okoye  | Computer Science |            23 |           9 | RES-09        | Payroll Database     | DATABASE      | WRITE
+     26 | 2026-10-22 14:13:31.57724+00  | DENY     | PERMISSION_NOT_GRANTED |       4 | fatima.noor@uni.edu   | Fatima Noor   | Facilities       |            24 |           9 | RES-09        | Payroll Database     | DATABASE      | EXECUTE
+     27 | 2026-10-22 14:13:31.577374+00 | DENY     | PERMISSION_NOT_GRANTED |       5 | jonas.weber@uni.edu   | Jonas Weber   | Computer Science |            25 |          10 | RES-10        | Support Portal       | APPLICATION   | READ
+     28 | 2026-10-22 14:13:31.577521+00 | ALLOW    | PERMISSION_GRANTED     |       6 | mei.chen@uni.edu      | Mei Lin Chen  | Finance          |            26 |          10 | RES-10        | Support Portal       | APPLICATION   | WRITE
+     29 | 2026-10-22 14:13:31.577645+00 | DENY     | PERMISSION_NOT_GRANTED |       7 | priya.sharma@uni.edu  | Priya Sharma  | Computer Science |            27 |          10 | RES-10        | Support Portal       | APPLICATION   | EXECUTE
+     30 | 2026-10-22 14:13:31.577752+00 | DENY     | PERMISSION_NOT_GRANTED |       8 | tomas.alvarez@uni.edu | Tomas Alvarez | Human Resources  |            28 |          11 | RES-11        | Research Server      | SERVER        | READ
+     31 | 2026-10-22 14:13:31.577835+00 | DENY     | NO_ACTIVE_ROLE         |       9 | rahul.verma@uni.edu   | Rahul Verma   | Support          |            29 |          11 | RES-11        | Research Server      | SERVER        | WRITE
+     32 | 2026-10-22 14:13:31.577987+00 | DENY     | PERMISSION_NOT_GRANTED |      10 | nora.patel@uni.edu    | Nora Patel    | Computer Science |            30 |          11 | RES-11        | Research Server      | SERVER        | EXECUTE
+     33 | 2026-10-22 14:13:31.578097+00 | DENY     | PERMISSION_NOT_GRANTED |      11 | omar.hassan@uni.edu   | Omar Hassan   | Finance          |            31 |          12 | RES-12        | Policy Library       | DOCUMENT      | READ
+     34 | 2026-10-22 14:13:31.578201+00 | DENY     | PERMISSION_NOT_GRANTED |      12 | elena.rossi@uni.edu   | Elena Rossi   | Human Resources  |            32 |          12 | RES-12        | Policy Library       | DOCUMENT      | WRITE
+     35 | 2026-10-22 14:13:31.578303+00 | DENY     | PERMISSION_NOT_GRANTED |      13 | lucas.silva@uni.edu   | Lucas Silva   | Facilities       |            33 |          12 | RES-12        | Policy Library       | DOCUMENT      | EXECUTE
+     36 | 2026-10-22 14:13:31.578407+00 | DENY     | PERMISSION_NOT_GRANTED |      14 | hana.kim@uni.edu      | Hana Kim      | Engineering      |             1 |           1 | RES-DB-01     | Reporting Database   | DATABASE      | ADMIN
+     37 | 2026-10-22 14:13:31.578505+00 | ALLOW    | PERMISSION_GRANTED     |      15 | arjun.rao@uni.edu     | Arjun Rao     | Security         |             2 |           1 | RES-DB-01     | Reporting Database   | DATABASE      | READ
+     38 | 2026-10-22 14:13:31.578606+00 | ALLOW    | PERMISSION_GRANTED     |      16 | sofia.garcia@uni.edu  | Sofia Garcia  | Operations       |             3 |           1 | RES-DB-01     | Reporting Database   | DATABASE      | WRITE
+     39 | 2026-10-22 14:13:31.578707+00 | ALLOW    | PERMISSION_GRANTED     |      17 | noah.brown@uni.edu    | Noah Brown    | Legal            |             4 |           2 | RES-APP-02    | Internal Application | APPLICATION   | EXECUTE
+     40 | 2026-10-22 14:13:31.578805+00 | ALLOW    | PERMISSION_GRANTED     |      18 | leila.khan@uni.edu    | Leila Khan    | Research         |             5 |           2 | RES-APP-02    | Internal Application | APPLICATION   | READ
+     41 | 2026-10-22 14:13:31.578906+00 | DENY     | PERMISSION_NOT_GRANTED |      19 | maya.das@uni.edu      | Maya Das      | Support          |             6 |           3 | RES-SRV-03    | Finance Server       | SERVER        | EXECUTE
+     42 | 2026-10-22 14:13:31.579007+00 | ALLOW    | PERMISSION_GRANTED     |      20 | ethan.lee@uni.edu     | Ethan Lee     | Computer Science |             7 |           3 | RES-SRV-03    | Finance Server       | SERVER        | READ
+     43 | 2026-10-22 14:13:31.579082+00 | DENY     | USER_DISABLED          |       1 | aisha.bello@uni.edu   | Aisha Bello   | Finance          |             8 |           3 | RES-SRV-03    | Finance Server       | SERVER        | WRITE
+     44 | 2026-10-22 14:13:31.579153+00 | DENY     | RESOURCE_INACTIVE      |       2 | chen.wei@uni.edu      | Chen Wei      | Human Resources  |             9 |           4 | RES-DOC-04    | Legacy Archive       | DOCUMENT      | READ
+     45 | 2026-10-22 14:13:31.579252+00 | DENY     | PERMISSION_NOT_GRANTED |       3 | daniel.okoye@uni.edu  | Daniel Okoye  | Computer Science |            10 |           5 | RES-05        | Employee Directory   | DATABASE      | READ
+     46 | 2026-10-22 14:13:31.579401+00 | DENY     | PERMISSION_NOT_GRANTED |       4 | fatima.noor@uni.edu   | Fatima Noor   | Facilities       |            11 |           5 | RES-05        | Employee Directory   | DATABASE      | WRITE
+     47 | 2026-10-22 14:13:31.579513+00 | DENY     | PERMISSION_NOT_GRANTED |       5 | jonas.weber@uni.edu   | Jonas Weber   | Computer Science |            12 |           5 | RES-05        | Employee Directory   | DATABASE      | EXECUTE
+     48 | 2026-10-22 14:13:31.57962+00  | ALLOW    | PERMISSION_GRANTED     |       6 | mei.chen@uni.edu      | Mei Lin Chen  | Finance          |            13 |           6 | RES-06        | Deployment Console   | APPLICATION   | READ
+     49 | 2026-10-22 14:13:31.579725+00 | DENY     | PERMISSION_NOT_GRANTED |       7 | priya.sharma@uni.edu  | Priya Sharma  | Computer Science |            14 |           6 | RES-06        | Deployment Console   | APPLICATION   | WRITE
+     50 | 2026-10-22 14:13:31.579826+00 | DENY     | PERMISSION_NOT_GRANTED |       8 | tomas.alvarez@uni.edu | Tomas Alvarez | Human Resources  |            15 |           6 | RES-06        | Deployment Console   | APPLICATION   | EXECUTE
+     51 | 2026-10-22 14:13:31.57991+00  | DENY     | NO_ACTIVE_ROLE         |       9 | rahul.verma@uni.edu   | Rahul Verma   | Support          |            16 |           7 | RES-07        | Build Server         | SERVER        | READ
+     52 | 2026-10-22 14:13:31.580013+00 | DENY     | PERMISSION_NOT_GRANTED |      10 | nora.patel@uni.edu    | Nora Patel    | Computer Science |            17 |           7 | RES-07        | Build Server         | SERVER        | WRITE
+     53 | 2026-10-22 14:13:31.580117+00 | DENY     | PERMISSION_NOT_GRANTED |      11 | omar.hassan@uni.edu   | Omar Hassan   | Finance          |            18 |           7 | RES-07        | Build Server         | SERVER        | EXECUTE
+     54 | 2026-10-22 14:13:31.580217+00 | DENY     | PERMISSION_NOT_GRANTED |      12 | elena.rossi@uni.edu   | Elena Rossi   | Human Resources  |            19 |           8 | RES-08        | Security Handbook    | DOCUMENT      | READ
+     55 | 2026-10-22 14:13:31.580317+00 | DENY     | PERMISSION_NOT_GRANTED |      13 | lucas.silva@uni.edu   | Lucas Silva   | Facilities       |            20 |           8 | RES-08        | Security Handbook    | DOCUMENT      | WRITE
+     56 | 2026-10-22 14:13:31.580418+00 | DENY     | PERMISSION_NOT_GRANTED |      14 | hana.kim@uni.edu      | Hana Kim      | Engineering      |            21 |           8 | RES-08        | Security Handbook    | DOCUMENT      | EXECUTE
+     57 | 2026-10-22 14:13:31.580522+00 | DENY     | PERMISSION_NOT_GRANTED |      15 | arjun.rao@uni.edu     | Arjun Rao     | Security         |            22 |           9 | RES-09        | Payroll Database     | DATABASE      | READ
+     58 | 2026-10-22 14:13:31.580624+00 | DENY     | PERMISSION_NOT_GRANTED |      16 | sofia.garcia@uni.edu  | Sofia Garcia  | Operations       |            23 |           9 | RES-09        | Payroll Database     | DATABASE      | WRITE
+     59 | 2026-10-22 14:13:31.580755+00 | DENY     | PERMISSION_NOT_GRANTED |      17 | noah.brown@uni.edu    | Noah Brown    | Legal            |            24 |           9 | RES-09        | Payroll Database     | DATABASE      | EXECUTE
+     60 | 2026-10-22 14:13:31.580861+00 | DENY     | PERMISSION_NOT_GRANTED |      18 | leila.khan@uni.edu    | Leila Khan    | Research         |            25 |          10 | RES-10        | Support Portal       | APPLICATION   | READ
+     61 | 2026-10-22 14:13:31.580963+00 | DENY     | PERMISSION_NOT_GRANTED |      19 | maya.das@uni.edu      | Maya Das      | Support          |            26 |          10 | RES-10        | Support Portal       | APPLICATION   | WRITE
+     62 | 2026-10-22 14:13:31.581068+00 | DENY     | PERMISSION_NOT_GRANTED |      20 | ethan.lee@uni.edu     | Ethan Lee     | Computer Science |            27 |          10 | RES-10        | Support Portal       | APPLICATION   | EXECUTE
+     63 | 2026-10-22 14:13:31.581141+00 | DENY     | USER_DISABLED          |       1 | aisha.bello@uni.edu   | Aisha Bello   | Finance          |            28 |          11 | RES-11        | Research Server      | SERVER        | READ
+     64 | 2026-10-22 14:13:31.581221+00 | DENY     | NO_ACTIVE_ROLE         |       2 | chen.wei@uni.edu      | Chen Wei      | Human Resources  |            29 |          11 | RES-11        | Research Server      | SERVER        | WRITE
+     65 | 2026-10-22 14:13:31.581346+00 | DENY     | PERMISSION_NOT_GRANTED |       3 | daniel.okoye@uni.edu  | Daniel Okoye  | Computer Science |            30 |          11 | RES-11        | Research Server      | SERVER        | EXECUTE
+     66 | 2026-10-22 14:13:31.581482+00 | DENY     | PERMISSION_NOT_GRANTED |       4 | fatima.noor@uni.edu   | Fatima Noor   | Facilities       |            31 |          12 | RES-12        | Policy Library       | DOCUMENT      | READ
+     67 | 2026-10-22 14:13:31.581605+00 | DENY     | PERMISSION_NOT_GRANTED |       5 | jonas.weber@uni.edu   | Jonas Weber   | Computer Science |            32 |          12 | RES-12        | Policy Library       | DOCUMENT      | WRITE
+     68 | 2026-10-22 14:13:31.581716+00 | ALLOW    | PERMISSION_GRANTED     |       6 | mei.chen@uni.edu      | Mei Lin Chen  | Finance          |            33 |          12 | RES-12        | Policy Library       | DOCUMENT      | EXECUTE
+     69 | 2026-10-22 14:13:31.581826+00 | DENY     | PERMISSION_NOT_GRANTED |       7 | priya.sharma@uni.edu  | Priya Sharma  | Computer Science |             1 |           1 | RES-DB-01     | Reporting Database   | DATABASE      | ADMIN
+     70 | 2026-10-22 14:13:31.58193+00  | ALLOW    | PERMISSION_GRANTED     |       8 | tomas.alvarez@uni.edu | Tomas Alvarez | Human Resources  |             2 |           1 | RES-DB-01     | Reporting Database   | DATABASE      | READ
+     71 | 2026-10-22 14:13:31.582019+00 | DENY     | NO_ACTIVE_ROLE         |       9 | rahul.verma@uni.edu   | Rahul Verma   | Support          |             3 |           1 | RES-DB-01     | Reporting Database   | DATABASE      | WRITE
+     72 | 2026-10-22 14:13:31.582125+00 | ALLOW    | PERMISSION_GRANTED     |      10 | nora.patel@uni.edu    | Nora Patel    | Computer Science |             4 |           2 | RES-APP-02    | Internal Application | APPLICATION   | EXECUTE
+     73 | 2026-10-22 14:13:31.582233+00 | ALLOW    | PERMISSION_GRANTED     |      11 | omar.hassan@uni.edu   | Omar Hassan   | Finance          |             5 |           2 | RES-APP-02    | Internal Application | APPLICATION   | READ
+     74 | 2026-10-22 14:13:31.582343+00 | DENY     | PERMISSION_NOT_GRANTED |      12 | elena.rossi@uni.edu   | Elena Rossi   | Human Resources  |             6 |           3 | RES-SRV-03    | Finance Server       | SERVER        | EXECUTE
+     75 | 2026-10-22 14:13:31.582452+00 | ALLOW    | PERMISSION_GRANTED     |      13 | lucas.silva@uni.edu   | Lucas Silva   | Facilities       |             7 |           3 | RES-SRV-03    | Finance Server       | SERVER        | READ
+     76 | 2026-10-22 14:13:31.58256+00  | DENY     | PERMISSION_NOT_GRANTED |      14 | hana.kim@uni.edu      | Hana Kim      | Engineering      |             8 |           3 | RES-SRV-03    | Finance Server       | SERVER        | WRITE
+     77 | 2026-10-22 14:13:31.582664+00 | DENY     | RESOURCE_INACTIVE      |      15 | arjun.rao@uni.edu     | Arjun Rao     | Security         |             9 |           4 | RES-DOC-04    | Legacy Archive       | DOCUMENT      | READ
+     78 | 2026-10-22 14:13:31.5828+00   | DENY     | PERMISSION_NOT_GRANTED |      16 | sofia.garcia@uni.edu  | Sofia Garcia  | Operations       |            10 |           5 | RES-05        | Employee Directory   | DATABASE      | READ
+     79 | 2026-10-22 14:13:31.582911+00 | DENY     | PERMISSION_NOT_GRANTED |      17 | noah.brown@uni.edu    | Noah Brown    | Legal            |            11 |           5 | RES-05        | Employee Directory   | DATABASE      | WRITE
+     80 | 2026-10-22 14:13:31.583017+00 | DENY     | PERMISSION_NOT_GRANTED |      18 | leila.khan@uni.edu    | Leila Khan    | Research         |            12 |           5 | RES-05        | Employee Directory   | DATABASE      | EXECUTE
+     81 | 2026-10-22 14:13:31.58312+00  | DENY     | PERMISSION_NOT_GRANTED |      19 | maya.das@uni.edu      | Maya Das      | Support          |            13 |           6 | RES-06        | Deployment Console   | APPLICATION   | READ
+     82 | 2026-10-22 14:13:31.583223+00 | DENY     | PERMISSION_NOT_GRANTED |      20 | ethan.lee@uni.edu     | Ethan Lee     | Computer Science |            14 |           6 | RES-06        | Deployment Console   | APPLICATION   | WRITE
+     83 | 2026-10-22 14:13:31.583299+00 | DENY     | USER_DISABLED          |       1 | aisha.bello@uni.edu   | Aisha Bello   | Finance          |            15 |           6 | RES-06        | Deployment Console   | APPLICATION   | EXECUTE
+     84 | 2026-10-22 14:13:31.583405+00 | DENY     | NO_ACTIVE_ROLE         |       2 | chen.wei@uni.edu      | Chen Wei      | Human Resources  |            16 |           7 | RES-07        | Build Server         | SERVER        | READ
+     85 | 2026-10-22 14:13:31.583527+00 | DENY     | PERMISSION_NOT_GRANTED |       3 | daniel.okoye@uni.edu  | Daniel Okoye  | Computer Science |            17 |           7 | RES-07        | Build Server         | SERVER        | WRITE
+     86 | 2026-10-22 14:13:31.583632+00 | DENY     | PERMISSION_NOT_GRANTED |       4 | fatima.noor@uni.edu   | Fatima Noor   | Facilities       |            18 |           7 | RES-07        | Build Server         | SERVER        | EXECUTE
+     87 | 2026-10-22 14:13:31.583741+00 | DENY     | PERMISSION_NOT_GRANTED |       5 | jonas.weber@uni.edu   | Jonas Weber   | Computer Science |            19 |           8 | RES-08        | Security Handbook    | DOCUMENT      | READ
+     88 | 2026-10-22 14:13:31.583844+00 | ALLOW    | PERMISSION_GRANTED     |       6 | mei.chen@uni.edu      | Mei Lin Chen  | Finance          |            20 |           8 | RES-08        | Security Handbook    | DOCUMENT      | WRITE
+     89 | 2026-10-22 14:13:31.583944+00 | DENY     | PERMISSION_NOT_GRANTED |       7 | priya.sharma@uni.edu  | Priya Sharma  | Computer Science |            21 |           8 | RES-08        | Security Handbook    | DOCUMENT      | EXECUTE
+     90 | 2026-10-22 14:13:31.584043+00 | DENY     | PERMISSION_NOT_GRANTED |       8 | tomas.alvarez@uni.edu | Tomas Alvarez | Human Resources  |            22 |           9 | RES-09        | Payroll Database     | DATABASE      | READ
+     91 | 2026-10-22 14:13:31.584122+00 | DENY     | NO_ACTIVE_ROLE         |       9 | rahul.verma@uni.edu   | Rahul Verma   | Support          |            23 |           9 | RES-09        | Payroll Database     | DATABASE      | WRITE
+     92 | 2026-10-22 14:13:31.584222+00 | DENY     | PERMISSION_NOT_GRANTED |      10 | nora.patel@uni.edu    | Nora Patel    | Computer Science |            24 |           9 | RES-09        | Payroll Database     | DATABASE      | EXECUTE
+     93 | 2026-10-22 14:13:31.584364+00 | DENY     | PERMISSION_NOT_GRANTED |      11 | omar.hassan@uni.edu   | Omar Hassan   | Finance          |            25 |          10 | RES-10        | Support Portal       | APPLICATION   | READ
+     94 | 2026-10-22 14:13:31.584519+00 | DENY     | PERMISSION_NOT_GRANTED |      12 | elena.rossi@uni.edu   | Elena Rossi   | Human Resources  |            26 |          10 | RES-10        | Support Portal       | APPLICATION   | WRITE
+     95 | 2026-10-22 14:13:31.58484+00  | DENY     | PERMISSION_NOT_GRANTED |      13 | lucas.silva@uni.edu   | Lucas Silva   | Facilities       |            27 |          10 | RES-10        | Support Portal       | APPLICATION   | EXECUTE
+     96 | 2026-10-22 14:13:31.585157+00 | DENY     | PERMISSION_NOT_GRANTED |      14 | hana.kim@uni.edu      | Hana Kim      | Engineering      |            28 |          11 | RES-11        | Research Server      | SERVER        | READ
+     97 | 2026-10-22 14:13:31.585391+00 | DENY     | PERMISSION_NOT_GRANTED |      15 | arjun.rao@uni.edu     | Arjun Rao     | Security         |            29 |          11 | RES-11        | Research Server      | SERVER        | WRITE
+     98 | 2026-10-22 14:13:31.585571+00 | DENY     | PERMISSION_NOT_GRANTED |      16 | sofia.garcia@uni.edu  | Sofia Garcia  | Operations       |            30 |          11 | RES-11        | Research Server      | SERVER        | EXECUTE
+     99 | 2026-10-22 14:13:31.585792+00 | DENY     | PERMISSION_NOT_GRANTED |      17 | noah.brown@uni.edu    | Noah Brown    | Legal            |            31 |          12 | RES-12        | Policy Library       | DOCUMENT      | READ
+    100 | 2026-10-22 14:13:31.593405+00 | DENY     | PERMISSION_NOT_GRANTED |      18 | leila.khan@uni.edu    | Leila Khan    | Research         |            32 |          12 | RES-12        | Policy Library       | DOCUMENT      | WRITE
+    101 | 2026-10-22 14:13:31.593576+00 | DENY     | PERMISSION_NOT_GRANTED |      19 | maya.das@uni.edu      | Maya Das      | Support          |            33 |          12 | RES-12        | Policy Library       | DOCUMENT      | EXECUTE
+    102 | 2026-10-22 14:13:31.593766+00 | DENY     | PERMISSION_NOT_GRANTED |      20 | ethan.lee@uni.edu     | Ethan Lee     | Computer Science |             1 |           1 | RES-DB-01     | Reporting Database   | DATABASE      | ADMIN
+    103 | 2026-10-22 14:13:31.593883+00 | DENY     | USER_DISABLED          |       1 | aisha.bello@uni.edu   | Aisha Bello   | Finance          |             2 |           1 | RES-DB-01     | Reporting Database   | DATABASE      | READ
+    104 | 2026-10-22 14:13:31.593977+00 | DENY     | NO_ACTIVE_ROLE         |       2 | chen.wei@uni.edu      | Chen Wei      | Human Resources  |             3 |           1 | RES-DB-01     | Reporting Database   | DATABASE      | WRITE
+    105 | 2026-10-22 14:13:31.594087+00 | DENY     | PERMISSION_NOT_GRANTED |       3 | daniel.okoye@uni.edu  | Daniel Okoye  | Computer Science |             4 |           2 | RES-APP-02    | Internal Application | APPLICATION   | EXECUTE
+    106 | 2026-10-22 14:13:31.594198+00 | ALLOW    | PERMISSION_GRANTED     |       4 | fatima.noor@uni.edu   | Fatima Noor   | Facilities       |             5 |           2 | RES-APP-02    | Internal Application | APPLICATION   | READ
+    107 | 2026-10-22 14:13:31.594314+00 | DENY     | PERMISSION_NOT_GRANTED |       5 | jonas.weber@uni.edu   | Jonas Weber   | Computer Science |             6 |           3 | RES-SRV-03    | Finance Server       | SERVER        | EXECUTE
+    108 | 2026-10-22 14:13:31.594418+00 | ALLOW    | PERMISSION_GRANTED     |       6 | mei.chen@uni.edu      | Mei Lin Chen  | Finance          |             7 |           3 | RES-SRV-03    | Finance Server       | SERVER        | READ
+    109 | 2026-10-22 14:13:31.594518+00 | DENY     | PERMISSION_NOT_GRANTED |       7 | priya.sharma@uni.edu  | Priya Sharma  | Computer Science |             8 |           3 | RES-SRV-03    | Finance Server       | SERVER        | WRITE
+    110 | 2026-10-22 14:13:31.594591+00 | DENY     | RESOURCE_INACTIVE      |       8 | tomas.alvarez@uni.edu | Tomas Alvarez | Human Resources  |             9 |           4 | RES-DOC-04    | Legacy Archive       | DOCUMENT      | READ
+    111 | 2026-10-22 14:13:31.59467+00  | DENY     | NO_ACTIVE_ROLE         |       9 | rahul.verma@uni.edu   | Rahul Verma   | Support          |            10 |           5 | RES-05        | Employee Directory   | DATABASE      | READ
+    112 | 2026-10-22 14:13:31.594768+00 | DENY     | PERMISSION_NOT_GRANTED |      10 | nora.patel@uni.edu    | Nora Patel    | Computer Science |            11 |           5 | RES-05        | Employee Directory   | DATABASE      | WRITE
+    113 | 2026-10-22 14:13:31.594866+00 | DENY     | PERMISSION_NOT_GRANTED |      11 | omar.hassan@uni.edu   | Omar Hassan   | Finance          |            12 |           5 | RES-05        | Employee Directory   | DATABASE      | EXECUTE
+    114 | 2026-10-22 14:13:31.594964+00 | DENY     | PERMISSION_NOT_GRANTED |      12 | elena.rossi@uni.edu   | Elena Rossi   | Human Resources  |            13 |           6 | RES-06        | Deployment Console   | APPLICATION   | READ
+    115 | 2026-10-22 14:13:31.595062+00 | DENY     | PERMISSION_NOT_GRANTED |      13 | lucas.silva@uni.edu   | Lucas Silva   | Facilities       |            14 |           6 | RES-06        | Deployment Console   | APPLICATION   | WRITE
+    116 | 2026-10-22 14:13:31.595159+00 | DENY     | PERMISSION_NOT_GRANTED |      14 | hana.kim@uni.edu      | Hana Kim      | Engineering      |            15 |           6 | RES-06        | Deployment Console   | APPLICATION   | EXECUTE
+    117 | 2026-10-22 14:13:31.595257+00 | DENY     | PERMISSION_NOT_GRANTED |      15 | arjun.rao@uni.edu     | Arjun Rao     | Security         |            16 |           7 | RES-07        | Build Server         | SERVER        | READ
+    118 | 2026-10-22 14:13:31.595358+00 | DENY     | PERMISSION_NOT_GRANTED |      16 | sofia.garcia@uni.edu  | Sofia Garcia  | Operations       |            17 |           7 | RES-07        | Build Server         | SERVER        | WRITE
+    119 | 2026-10-22 14:13:31.595454+00 | DENY     | PERMISSION_NOT_GRANTED |      17 | noah.brown@uni.edu    | Noah Brown    | Legal            |            18 |           7 | RES-07        | Build Server         | SERVER        | EXECUTE
+    120 | 2026-10-22 14:13:31.595551+00 | DENY     | PERMISSION_NOT_GRANTED |      18 | leila.khan@uni.edu    | Leila Khan    | Research         |            19 |           8 | RES-08        | Security Handbook    | DOCUMENT      | READ
+(120 rows)
+
+Q14 Users possessing selected permission
+ user_id |   full_name   |         email         
+---------+---------------+-----------------------
+       3 | Daniel Okoye  | daniel.okoye@uni.edu
+       4 | Fatima Noor   | fatima.noor@uni.edu
+       5 | Jonas Weber   | jonas.weber@uni.edu
+       6 | Mei Lin Chen  | mei.chen@uni.edu
+       7 | Priya Sharma  | priya.sharma@uni.edu
+       8 | Tomas Alvarez | tomas.alvarez@uni.edu
+      10 | Nora Patel    | nora.patel@uni.edu
+      11 | Omar Hassan   | omar.hassan@uni.edu
+      12 | Elena Rossi   | elena.rossi@uni.edu
+      13 | Lucas Silva   | lucas.silva@uni.edu
+      14 | Hana Kim      | hana.kim@uni.edu
+      15 | Arjun Rao     | arjun.rao@uni.edu
+      16 | Sofia Garcia  | sofia.garcia@uni.edu
+      17 | Noah Brown    | noah.brown@uni.edu
+      18 | Leila Khan    | leila.khan@uni.edu
+      19 | Maya Das      | maya.das@uni.edu
+      20 | Ethan Lee     | ethan.lee@uni.edu
+(17 rows)
+
+Q15 Complete joined audit report
+ log_id |   full_name   | department_name  | resource_code | action_code | decision |      reason_code       |          occurred_at          
+--------+---------------+------------------+---------------+-------------+----------+------------------------+-------------------------------
+      1 | Rahul Verma   | Support          | RES-APP-02    | READ        | ALLOW    | PERMISSION_GRANTED     | 2026-10-22 14:13:31.549602+00
+      2 | Rahul Verma   | Support          | RES-APP-02    | READ        | DENY     | NO_ACTIVE_ROLE         | 2026-10-22 14:13:31.571302+00
+      3 | Aisha Bello   | Finance          | RES-DB-01     | ADMIN       | DENY     | USER_DISABLED          | 2026-10-22 14:13:31.571954+00
+      4 | Chen Wei      | Human Resources  | RES-DB-01     | READ        | DENY     | NO_ACTIVE_ROLE         | 2026-10-22 14:13:31.572308+00
+      5 | Daniel Okoye  | Computer Science | RES-DB-01     | WRITE       | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.5731+00
+      6 | Fatima Noor   | Facilities       | RES-APP-02    | EXECUTE     | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.573855+00
+      7 | Jonas Weber   | Computer Science | RES-APP-02    | READ        | ALLOW    | PERMISSION_GRANTED     | 2026-10-22 14:13:31.574422+00
+      8 | Mei Lin Chen  | Finance          | RES-SRV-03    | EXECUTE     | ALLOW    | PERMISSION_GRANTED     | 2026-10-22 14:13:31.574858+00
+      9 | Priya Sharma  | Computer Science | RES-SRV-03    | READ        | ALLOW    | PERMISSION_GRANTED     | 2026-10-22 14:13:31.57532+00
+     10 | Tomas Alvarez | Human Resources  | RES-SRV-03    | WRITE       | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.575494+00
+     11 | Rahul Verma   | Support          | RES-DOC-04    | READ        | DENY     | RESOURCE_INACTIVE      | 2026-10-22 14:13:31.575614+00
+     12 | Nora Patel    | Computer Science | RES-05        | READ        | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.575728+00
+     13 | Omar Hassan   | Finance          | RES-05        | WRITE       | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.575832+00
+     14 | Elena Rossi   | Human Resources  | RES-05        | EXECUTE     | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.575934+00
+     15 | Lucas Silva   | Facilities       | RES-06        | READ        | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.576032+00
+     16 | Hana Kim      | Engineering      | RES-06        | WRITE       | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.576137+00
+     17 | Arjun Rao     | Security         | RES-06        | EXECUTE     | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.576235+00
+     18 | Sofia Garcia  | Operations       | RES-07        | READ        | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.576332+00
+     19 | Noah Brown    | Legal            | RES-07        | WRITE       | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.576429+00
+     20 | Leila Khan    | Research         | RES-07        | EXECUTE     | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.576526+00
+     21 | Maya Das      | Support          | RES-08        | READ        | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.576622+00
+     22 | Ethan Lee     | Computer Science | RES-08        | WRITE       | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.576845+00
+     23 | Aisha Bello   | Finance          | RES-08        | EXECUTE     | DENY     | USER_DISABLED          | 2026-10-22 14:13:31.576928+00
+     24 | Chen Wei      | Human Resources  | RES-09        | READ        | DENY     | NO_ACTIVE_ROLE         | 2026-10-22 14:13:31.577011+00
+     25 | Daniel Okoye  | Computer Science | RES-09        | WRITE       | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.577113+00
+     26 | Fatima Noor   | Facilities       | RES-09        | EXECUTE     | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.57724+00
+     27 | Jonas Weber   | Computer Science | RES-10        | READ        | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.577374+00
+     28 | Mei Lin Chen  | Finance          | RES-10        | WRITE       | ALLOW    | PERMISSION_GRANTED     | 2026-10-22 14:13:31.577521+00
+     29 | Priya Sharma  | Computer Science | RES-10        | EXECUTE     | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.577645+00
+     30 | Tomas Alvarez | Human Resources  | RES-11        | READ        | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.577752+00
+     31 | Rahul Verma   | Support          | RES-11        | WRITE       | DENY     | NO_ACTIVE_ROLE         | 2026-10-22 14:13:31.577835+00
+     32 | Nora Patel    | Computer Science | RES-11        | EXECUTE     | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.577987+00
+     33 | Omar Hassan   | Finance          | RES-12        | READ        | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.578097+00
+     34 | Elena Rossi   | Human Resources  | RES-12        | WRITE       | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.578201+00
+     35 | Lucas Silva   | Facilities       | RES-12        | EXECUTE     | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.578303+00
+     36 | Hana Kim      | Engineering      | RES-DB-01     | ADMIN       | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.578407+00
+     37 | Arjun Rao     | Security         | RES-DB-01     | READ        | ALLOW    | PERMISSION_GRANTED     | 2026-10-22 14:13:31.578505+00
+     38 | Sofia Garcia  | Operations       | RES-DB-01     | WRITE       | ALLOW    | PERMISSION_GRANTED     | 2026-10-22 14:13:31.578606+00
+     39 | Noah Brown    | Legal            | RES-APP-02    | EXECUTE     | ALLOW    | PERMISSION_GRANTED     | 2026-10-22 14:13:31.578707+00
+     40 | Leila Khan    | Research         | RES-APP-02    | READ        | ALLOW    | PERMISSION_GRANTED     | 2026-10-22 14:13:31.578805+00
+     41 | Maya Das      | Support          | RES-SRV-03    | EXECUTE     | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.578906+00
+     42 | Ethan Lee     | Computer Science | RES-SRV-03    | READ        | ALLOW    | PERMISSION_GRANTED     | 2026-10-22 14:13:31.579007+00
+     43 | Aisha Bello   | Finance          | RES-SRV-03    | WRITE       | DENY     | USER_DISABLED          | 2026-10-22 14:13:31.579082+00
+     44 | Chen Wei      | Human Resources  | RES-DOC-04    | READ        | DENY     | RESOURCE_INACTIVE      | 2026-10-22 14:13:31.579153+00
+     45 | Daniel Okoye  | Computer Science | RES-05        | READ        | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.579252+00
+     46 | Fatima Noor   | Facilities       | RES-05        | WRITE       | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.579401+00
+     47 | Jonas Weber   | Computer Science | RES-05        | EXECUTE     | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.579513+00
+     48 | Mei Lin Chen  | Finance          | RES-06        | READ        | ALLOW    | PERMISSION_GRANTED     | 2026-10-22 14:13:31.57962+00
+     49 | Priya Sharma  | Computer Science | RES-06        | WRITE       | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.579725+00
+     50 | Tomas Alvarez | Human Resources  | RES-06        | EXECUTE     | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.579826+00
+     51 | Rahul Verma   | Support          | RES-07        | READ        | DENY     | NO_ACTIVE_ROLE         | 2026-10-22 14:13:31.57991+00
+     52 | Nora Patel    | Computer Science | RES-07        | WRITE       | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.580013+00
+     53 | Omar Hassan   | Finance          | RES-07        | EXECUTE     | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.580117+00
+     54 | Elena Rossi   | Human Resources  | RES-08        | READ        | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.580217+00
+     55 | Lucas Silva   | Facilities       | RES-08        | WRITE       | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.580317+00
+     56 | Hana Kim      | Engineering      | RES-08        | EXECUTE     | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.580418+00
+     57 | Arjun Rao     | Security         | RES-09        | READ        | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.580522+00
+     58 | Sofia Garcia  | Operations       | RES-09        | WRITE       | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.580624+00
+     59 | Noah Brown    | Legal            | RES-09        | EXECUTE     | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.580755+00
+     60 | Leila Khan    | Research         | RES-10        | READ        | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.580861+00
+     61 | Maya Das      | Support          | RES-10        | WRITE       | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.580963+00
+     62 | Ethan Lee     | Computer Science | RES-10        | EXECUTE     | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.581068+00
+     63 | Aisha Bello   | Finance          | RES-11        | READ        | DENY     | USER_DISABLED          | 2026-10-22 14:13:31.581141+00
+     64 | Chen Wei      | Human Resources  | RES-11        | WRITE       | DENY     | NO_ACTIVE_ROLE         | 2026-10-22 14:13:31.581221+00
+     65 | Daniel Okoye  | Computer Science | RES-11        | EXECUTE     | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.581346+00
+     66 | Fatima Noor   | Facilities       | RES-12        | READ        | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.581482+00
+     67 | Jonas Weber   | Computer Science | RES-12        | WRITE       | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.581605+00
+     68 | Mei Lin Chen  | Finance          | RES-12        | EXECUTE     | ALLOW    | PERMISSION_GRANTED     | 2026-10-22 14:13:31.581716+00
+     69 | Priya Sharma  | Computer Science | RES-DB-01     | ADMIN       | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.581826+00
+     70 | Tomas Alvarez | Human Resources  | RES-DB-01     | READ        | ALLOW    | PERMISSION_GRANTED     | 2026-10-22 14:13:31.58193+00
+     71 | Rahul Verma   | Support          | RES-DB-01     | WRITE       | DENY     | NO_ACTIVE_ROLE         | 2026-10-22 14:13:31.582019+00
+     72 | Nora Patel    | Computer Science | RES-APP-02    | EXECUTE     | ALLOW    | PERMISSION_GRANTED     | 2026-10-22 14:13:31.582125+00
+     73 | Omar Hassan   | Finance          | RES-APP-02    | READ        | ALLOW    | PERMISSION_GRANTED     | 2026-10-22 14:13:31.582233+00
+     74 | Elena Rossi   | Human Resources  | RES-SRV-03    | EXECUTE     | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.582343+00
+     75 | Lucas Silva   | Facilities       | RES-SRV-03    | READ        | ALLOW    | PERMISSION_GRANTED     | 2026-10-22 14:13:31.582452+00
+     76 | Hana Kim      | Engineering      | RES-SRV-03    | WRITE       | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.58256+00
+     77 | Arjun Rao     | Security         | RES-DOC-04    | READ        | DENY     | RESOURCE_INACTIVE      | 2026-10-22 14:13:31.582664+00
+     78 | Sofia Garcia  | Operations       | RES-05        | READ        | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.5828+00
+     79 | Noah Brown    | Legal            | RES-05        | WRITE       | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.582911+00
+     80 | Leila Khan    | Research         | RES-05        | EXECUTE     | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.583017+00
+     81 | Maya Das      | Support          | RES-06        | READ        | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.58312+00
+     82 | Ethan Lee     | Computer Science | RES-06        | WRITE       | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.583223+00
+     83 | Aisha Bello   | Finance          | RES-06        | EXECUTE     | DENY     | USER_DISABLED          | 2026-10-22 14:13:31.583299+00
+     84 | Chen Wei      | Human Resources  | RES-07        | READ        | DENY     | NO_ACTIVE_ROLE         | 2026-10-22 14:13:31.583405+00
+     85 | Daniel Okoye  | Computer Science | RES-07        | WRITE       | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.583527+00
+     86 | Fatima Noor   | Facilities       | RES-07        | EXECUTE     | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.583632+00
+     87 | Jonas Weber   | Computer Science | RES-08        | READ        | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.583741+00
+     88 | Mei Lin Chen  | Finance          | RES-08        | WRITE       | ALLOW    | PERMISSION_GRANTED     | 2026-10-22 14:13:31.583844+00
+     89 | Priya Sharma  | Computer Science | RES-08        | EXECUTE     | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.583944+00
+     90 | Tomas Alvarez | Human Resources  | RES-09        | READ        | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.584043+00
+     91 | Rahul Verma   | Support          | RES-09        | WRITE       | DENY     | NO_ACTIVE_ROLE         | 2026-10-22 14:13:31.584122+00
+     92 | Nora Patel    | Computer Science | RES-09        | EXECUTE     | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.584222+00
+     93 | Omar Hassan   | Finance          | RES-10        | READ        | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.584364+00
+     94 | Elena Rossi   | Human Resources  | RES-10        | WRITE       | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.584519+00
+     95 | Lucas Silva   | Facilities       | RES-10        | EXECUTE     | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.58484+00
+     96 | Hana Kim      | Engineering      | RES-11        | READ        | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.585157+00
+     97 | Arjun Rao     | Security         | RES-11        | WRITE       | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.585391+00
+     98 | Sofia Garcia  | Operations       | RES-11        | EXECUTE     | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.585571+00
+     99 | Noah Brown    | Legal            | RES-12        | READ        | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.585792+00
+    100 | Leila Khan    | Research         | RES-12        | WRITE       | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.593405+00
+    101 | Maya Das      | Support          | RES-12        | EXECUTE     | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.593576+00
+    102 | Ethan Lee     | Computer Science | RES-DB-01     | ADMIN       | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.593766+00
+    103 | Aisha Bello   | Finance          | RES-DB-01     | READ        | DENY     | USER_DISABLED          | 2026-10-22 14:13:31.593883+00
+    104 | Chen Wei      | Human Resources  | RES-DB-01     | WRITE       | DENY     | NO_ACTIVE_ROLE         | 2026-10-22 14:13:31.593977+00
+    105 | Daniel Okoye  | Computer Science | RES-APP-02    | EXECUTE     | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.594087+00
+    106 | Fatima Noor   | Facilities       | RES-APP-02    | READ        | ALLOW    | PERMISSION_GRANTED     | 2026-10-22 14:13:31.594198+00
+    107 | Jonas Weber   | Computer Science | RES-SRV-03    | EXECUTE     | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.594314+00
+    108 | Mei Lin Chen  | Finance          | RES-SRV-03    | READ        | ALLOW    | PERMISSION_GRANTED     | 2026-10-22 14:13:31.594418+00
+    109 | Priya Sharma  | Computer Science | RES-SRV-03    | WRITE       | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.594518+00
+    110 | Tomas Alvarez | Human Resources  | RES-DOC-04    | READ        | DENY     | RESOURCE_INACTIVE      | 2026-10-22 14:13:31.594591+00
+    111 | Rahul Verma   | Support          | RES-05        | READ        | DENY     | NO_ACTIVE_ROLE         | 2026-10-22 14:13:31.59467+00
+    112 | Nora Patel    | Computer Science | RES-05        | WRITE       | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.594768+00
+    113 | Omar Hassan   | Finance          | RES-05        | EXECUTE     | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.594866+00
+    114 | Elena Rossi   | Human Resources  | RES-06        | READ        | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.594964+00
+    115 | Lucas Silva   | Facilities       | RES-06        | WRITE       | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.595062+00
+    116 | Hana Kim      | Engineering      | RES-06        | EXECUTE     | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.595159+00
+    117 | Arjun Rao     | Security         | RES-07        | READ        | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.595257+00
+    118 | Sofia Garcia  | Operations       | RES-07        | WRITE       | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.595358+00
+    119 | Noah Brown    | Legal            | RES-07        | EXECUTE     | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.595454+00
+    120 | Leila Khan    | Research         | RES-08        | READ        | DENY     | PERMISSION_NOT_GRANTED | 2026-10-22 14:13:31.595551+00
+(120 rows)
+
+
+SOURCE: database/queries/020_basic_sql.sql
+BEGIN
+INSERT: register an unused department
+ department_id |        department_name        
+---------------+-------------------------------
+            11 | Temporary Training Department
+(1 row)
+
+INSERT 0 1
+UPDATE: correct its name
+ department_id |        department_name        
+---------------+-------------------------------
+            11 | Temporary Learning Department
+(1 row)
+
+UPDATE 1
+DELETE: remove an unused department (referenced departments are protected)
+ department_id |        department_name        
+---------------+-------------------------------
+            11 | Temporary Learning Department
+(1 row)
+
+DELETE 1
+ROLLBACK
+
+SOURCE: database/queries/030_joins.sql
+=== 1. INNER JOIN — users who hold roles, with their department and role ===
+         email         | department_name  |     role_name     
+-----------------------+------------------+-------------------
+ aisha.bello@uni.edu   | Finance          | Analyst
+ arjun.rao@uni.edu     | Security         | Analyst
+ arjun.rao@uni.edu     | Security         | Viewer
+ daniel.okoye@uni.edu  | Computer Science | Auditor
+ elena.rossi@uni.edu   | Human Resources  | Analyst
+ elena.rossi@uni.edu   | Human Resources  | Viewer
+ ethan.lee@uni.edu     | Computer Science | Analyst
+ ethan.lee@uni.edu     | Computer Science | Intern
+ ethan.lee@uni.edu     | Computer Science | Viewer
+ fatima.noor@uni.edu   | Facilities       | Viewer
+ hana.kim@uni.edu      | Engineering      | Analyst
+ hana.kim@uni.edu      | Engineering      | Viewer
+ jonas.weber@uni.edu   | Computer Science | Auditor
+ jonas.weber@uni.edu   | Computer Science | Legacy Contractor
+ jonas.weber@uni.edu   | Computer Science | Viewer
+ leila.khan@uni.edu    | Research         | Analyst
+ leila.khan@uni.edu    | Research         | Viewer
+ lucas.silva@uni.edu   | Facilities       | Analyst
+ lucas.silva@uni.edu   | Facilities       | Viewer
+ maya.das@uni.edu      | Support          | Analyst
+ maya.das@uni.edu      | Support          | Viewer
+ mei.chen@uni.edu      | Finance          | Administrator
+ mei.chen@uni.edu      | Finance          | Analyst
+ noah.brown@uni.edu    | Legal            | Analyst
+ noah.brown@uni.edu    | Legal            | Viewer
+ nora.patel@uni.edu    | Computer Science | Analyst
+ nora.patel@uni.edu    | Computer Science | Viewer
+ omar.hassan@uni.edu   | Finance          | Analyst
+ omar.hassan@uni.edu   | Finance          | Viewer
+ priya.sharma@uni.edu  | Computer Science | Analyst
+ priya.sharma@uni.edu  | Computer Science | Viewer
+ sofia.garcia@uni.edu  | Operations       | Analyst
+ sofia.garcia@uni.edu  | Operations       | Viewer
+ tomas.alvarez@uni.edu | Human Resources  | Viewer
+(34 rows)
+
+
+=== 2. LEFT JOIN — every user, including Chen Wei who has no roles ===
+         email         |  status  |     role_name     
+-----------------------+----------+-------------------
+ chen.wei@uni.edu      | ACTIVE   | 
+ rahul.verma@uni.edu   | ACTIVE   | 
+ aisha.bello@uni.edu   | DISABLED | Analyst
+ arjun.rao@uni.edu     | ACTIVE   | Viewer
+ arjun.rao@uni.edu     | ACTIVE   | Analyst
+ daniel.okoye@uni.edu  | ACTIVE   | Auditor
+ elena.rossi@uni.edu   | ACTIVE   | Analyst
+ elena.rossi@uni.edu   | ACTIVE   | Viewer
+ ethan.lee@uni.edu     | ACTIVE   | Analyst
+ ethan.lee@uni.edu     | ACTIVE   | Intern
+ ethan.lee@uni.edu     | ACTIVE   | Viewer
+ fatima.noor@uni.edu   | ACTIVE   | Viewer
+ hana.kim@uni.edu      | ACTIVE   | Viewer
+ hana.kim@uni.edu      | ACTIVE   | Analyst
+ jonas.weber@uni.edu   | ACTIVE   | Legacy Contractor
+ jonas.weber@uni.edu   | ACTIVE   | Auditor
+ jonas.weber@uni.edu   | ACTIVE   | Viewer
+ leila.khan@uni.edu    | ACTIVE   | Analyst
+ leila.khan@uni.edu    | ACTIVE   | Viewer
+ lucas.silva@uni.edu   | ACTIVE   | Analyst
+ lucas.silva@uni.edu   | ACTIVE   | Viewer
+ maya.das@uni.edu      | ACTIVE   | Analyst
+ maya.das@uni.edu      | ACTIVE   | Viewer
+ mei.chen@uni.edu      | ACTIVE   | Analyst
+ mei.chen@uni.edu      | ACTIVE   | Administrator
+ noah.brown@uni.edu    | ACTIVE   | Analyst
+ noah.brown@uni.edu    | ACTIVE   | Viewer
+ nora.patel@uni.edu    | ACTIVE   | Analyst
+ nora.patel@uni.edu    | ACTIVE   | Viewer
+ omar.hassan@uni.edu   | ACTIVE   | Viewer
+ omar.hassan@uni.edu   | ACTIVE   | Analyst
+ priya.sharma@uni.edu  | ACTIVE   | Viewer
+ priya.sharma@uni.edu  | ACTIVE   | Analyst
+ sofia.garcia@uni.edu  | ACTIVE   | Viewer
+ sofia.garcia@uni.edu  | ACTIVE   | Analyst
+ tomas.alvarez@uni.edu | ACTIVE   | Viewer
+(36 rows)
+
+
+=== 3. Multi-table join (5 tables) — FR-04: effective permissions ===
+    A permission counts only when the user, the role and the resource are active.
+         email         | resource_code |    type     | action_code 
+-----------------------+---------------+-------------+-------------
+ arjun.rao@uni.edu     | RES-APP-02    | APPLICATION | EXECUTE
+ arjun.rao@uni.edu     | RES-APP-02    | APPLICATION | READ
+ arjun.rao@uni.edu     | RES-DB-01     | DATABASE    | READ
+ arjun.rao@uni.edu     | RES-DB-01     | DATABASE    | WRITE
+ arjun.rao@uni.edu     | RES-SRV-03    | SERVER      | READ
+ daniel.okoye@uni.edu  | RES-DB-01     | DATABASE    | READ
+ daniel.okoye@uni.edu  | RES-SRV-03    | SERVER      | READ
+ elena.rossi@uni.edu   | RES-APP-02    | APPLICATION | EXECUTE
+ elena.rossi@uni.edu   | RES-APP-02    | APPLICATION | READ
+ elena.rossi@uni.edu   | RES-DB-01     | DATABASE    | READ
+ elena.rossi@uni.edu   | RES-DB-01     | DATABASE    | WRITE
+ elena.rossi@uni.edu   | RES-SRV-03    | SERVER      | READ
+ ethan.lee@uni.edu     | RES-APP-02    | APPLICATION | EXECUTE
+ ethan.lee@uni.edu     | RES-APP-02    | APPLICATION | READ
+ ethan.lee@uni.edu     | RES-DB-01     | DATABASE    | READ
+ ethan.lee@uni.edu     | RES-DB-01     | DATABASE    | WRITE
+ ethan.lee@uni.edu     | RES-SRV-03    | SERVER      | READ
+ fatima.noor@uni.edu   | RES-APP-02    | APPLICATION | READ
+ fatima.noor@uni.edu   | RES-DB-01     | DATABASE    | READ
+ hana.kim@uni.edu      | RES-APP-02    | APPLICATION | EXECUTE
+ hana.kim@uni.edu      | RES-APP-02    | APPLICATION | READ
+ hana.kim@uni.edu      | RES-DB-01     | DATABASE    | READ
+ hana.kim@uni.edu      | RES-DB-01     | DATABASE    | WRITE
+ hana.kim@uni.edu      | RES-SRV-03    | SERVER      | READ
+ jonas.weber@uni.edu   | RES-APP-02    | APPLICATION | READ
+ jonas.weber@uni.edu   | RES-DB-01     | DATABASE    | READ
+ jonas.weber@uni.edu   | RES-SRV-03    | SERVER      | READ
+ leila.khan@uni.edu    | RES-APP-02    | APPLICATION | EXECUTE
+ leila.khan@uni.edu    | RES-APP-02    | APPLICATION | READ
+ leila.khan@uni.edu    | RES-DB-01     | DATABASE    | READ
+ leila.khan@uni.edu    | RES-DB-01     | DATABASE    | WRITE
+ leila.khan@uni.edu    | RES-SRV-03    | SERVER      | READ
+ lucas.silva@uni.edu   | RES-APP-02    | APPLICATION | EXECUTE
+ lucas.silva@uni.edu   | RES-APP-02    | APPLICATION | READ
+ lucas.silva@uni.edu   | RES-DB-01     | DATABASE    | READ
+ lucas.silva@uni.edu   | RES-DB-01     | DATABASE    | WRITE
+ lucas.silva@uni.edu   | RES-SRV-03    | SERVER      | READ
+ maya.das@uni.edu      | RES-APP-02    | APPLICATION | EXECUTE
+ maya.das@uni.edu      | RES-APP-02    | APPLICATION | READ
+ maya.das@uni.edu      | RES-DB-01     | DATABASE    | READ
+ maya.das@uni.edu      | RES-DB-01     | DATABASE    | WRITE
+ maya.das@uni.edu      | RES-SRV-03    | SERVER      | READ
+ mei.chen@uni.edu      | RES-05        | DATABASE    | EXECUTE
+ mei.chen@uni.edu      | RES-05        | DATABASE    | READ
+ mei.chen@uni.edu      | RES-05        | DATABASE    | WRITE
+ mei.chen@uni.edu      | RES-06        | APPLICATION | EXECUTE
+ mei.chen@uni.edu      | RES-06        | APPLICATION | READ
+ mei.chen@uni.edu      | RES-06        | APPLICATION | WRITE
+ mei.chen@uni.edu      | RES-07        | SERVER      | EXECUTE
+ mei.chen@uni.edu      | RES-07        | SERVER      | READ
+ mei.chen@uni.edu      | RES-07        | SERVER      | WRITE
+ mei.chen@uni.edu      | RES-08        | DOCUMENT    | EXECUTE
+ mei.chen@uni.edu      | RES-08        | DOCUMENT    | READ
+ mei.chen@uni.edu      | RES-08        | DOCUMENT    | WRITE
+ mei.chen@uni.edu      | RES-09        | DATABASE    | EXECUTE
+ mei.chen@uni.edu      | RES-09        | DATABASE    | READ
+ mei.chen@uni.edu      | RES-09        | DATABASE    | WRITE
+ mei.chen@uni.edu      | RES-10        | APPLICATION | EXECUTE
+ mei.chen@uni.edu      | RES-10        | APPLICATION | READ
+ mei.chen@uni.edu      | RES-10        | APPLICATION | WRITE
+ mei.chen@uni.edu      | RES-11        | SERVER      | EXECUTE
+ mei.chen@uni.edu      | RES-11        | SERVER      | READ
+ mei.chen@uni.edu      | RES-11        | SERVER      | WRITE
+ mei.chen@uni.edu      | RES-12        | DOCUMENT    | EXECUTE
+ mei.chen@uni.edu      | RES-12        | DOCUMENT    | READ
+ mei.chen@uni.edu      | RES-12        | DOCUMENT    | WRITE
+ mei.chen@uni.edu      | RES-APP-02    | APPLICATION | EXECUTE
+ mei.chen@uni.edu      | RES-APP-02    | APPLICATION | READ
+ mei.chen@uni.edu      | RES-DB-01     | DATABASE    | ADMIN
+ mei.chen@uni.edu      | RES-DB-01     | DATABASE    | READ
+ mei.chen@uni.edu      | RES-DB-01     | DATABASE    | WRITE
+ mei.chen@uni.edu      | RES-SRV-03    | SERVER      | EXECUTE
+ mei.chen@uni.edu      | RES-SRV-03    | SERVER      | READ
+ mei.chen@uni.edu      | RES-SRV-03    | SERVER      | WRITE
+ noah.brown@uni.edu    | RES-APP-02    | APPLICATION | EXECUTE
+ noah.brown@uni.edu    | RES-APP-02    | APPLICATION | READ
+ noah.brown@uni.edu    | RES-DB-01     | DATABASE    | READ
+ noah.brown@uni.edu    | RES-DB-01     | DATABASE    | WRITE
+ noah.brown@uni.edu    | RES-SRV-03    | SERVER      | READ
+ nora.patel@uni.edu    | RES-APP-02    | APPLICATION | EXECUTE
+ nora.patel@uni.edu    | RES-APP-02    | APPLICATION | READ
+ nora.patel@uni.edu    | RES-DB-01     | DATABASE    | READ
+ nora.patel@uni.edu    | RES-DB-01     | DATABASE    | WRITE
+ nora.patel@uni.edu    | RES-SRV-03    | SERVER      | READ
+ omar.hassan@uni.edu   | RES-APP-02    | APPLICATION | EXECUTE
+ omar.hassan@uni.edu   | RES-APP-02    | APPLICATION | READ
+ omar.hassan@uni.edu   | RES-DB-01     | DATABASE    | READ
+ omar.hassan@uni.edu   | RES-DB-01     | DATABASE    | WRITE
+ omar.hassan@uni.edu   | RES-SRV-03    | SERVER      | READ
+ priya.sharma@uni.edu  | RES-APP-02    | APPLICATION | EXECUTE
+ priya.sharma@uni.edu  | RES-APP-02    | APPLICATION | READ
+ priya.sharma@uni.edu  | RES-DB-01     | DATABASE    | READ
+ priya.sharma@uni.edu  | RES-DB-01     | DATABASE    | WRITE
+ priya.sharma@uni.edu  | RES-SRV-03    | SERVER      | READ
+ sofia.garcia@uni.edu  | RES-APP-02    | APPLICATION | EXECUTE
+ sofia.garcia@uni.edu  | RES-APP-02    | APPLICATION | READ
+ sofia.garcia@uni.edu  | RES-DB-01     | DATABASE    | READ
+ sofia.garcia@uni.edu  | RES-DB-01     | DATABASE    | WRITE
+ sofia.garcia@uni.edu  | RES-SRV-03    | SERVER      | READ
+ tomas.alvarez@uni.edu | RES-APP-02    | APPLICATION | READ
+ tomas.alvarez@uni.edu | RES-DB-01     | DATABASE    | READ
+(101 rows)
+
+
+=== 3b. UNION semantics made visible: 2 role paths, 1 effective permission ===
+     Priya reaches RES-DB-01:READ through both Viewer and Analyst, but holds
+     it once. Without DISTINCT this query would report her access twice.
+        email         | resource_code | action_code | role_paths | distinct_roles |   granted_via   
+----------------------+---------------+-------------+------------+----------------+-----------------
+ priya.sharma@uni.edu | RES-DB-01     | READ        |          2 |              2 | Analyst, Viewer
+(1 row)
+
+
+=== 3c. The same permission, as the effective-permissions view reports it ===
+        email         | resource_code | action_code 
+----------------------+---------------+-------------
+ priya.sharma@uni.edu | RES-DB-01     | READ
+(1 row)
+
+
+=== 4. SELF JOIN — who shares a department with someone holding Administrator? ===
+ staff_member |        email        | department_name | holds_administrator |   admin_email    
+--------------+---------------------+-----------------+---------------------+------------------
+ Aisha Bello  | aisha.bello@uni.edu | Finance         | Mei Lin Chen        | mei.chen@uni.edu
+ Omar Hassan  | omar.hassan@uni.edu | Finance         | Mei Lin Chen        | mei.chen@uni.edu
+(2 rows)
+
+
+=== 5. LEFT JOIN + anti-join: users with no roles at all ===
+        email        |  full_name  
+---------------------+-------------
+ chen.wei@uni.edu    | Chen Wei
+ rahul.verma@uni.edu | Rahul Verma
+(2 rows)
+
+
+=== 6. LEFT JOIN on the audit side — permissions never attempted ===
+ permission_id | resource_code | action_code | attempts 
+---------------+---------------+-------------+----------
+            21 | RES-08        | EXECUTE     |        3
+            20 | RES-08        | WRITE       |        3
+            24 | RES-09        | EXECUTE     |        3
+            22 | RES-09        | READ        |        3
+            23 | RES-09        | WRITE       |        3
+            27 | RES-10        | EXECUTE     |        3
+            25 | RES-10        | READ        |        3
+            26 | RES-10        | WRITE       |        3
+            30 | RES-11        | EXECUTE     |        3
+            28 | RES-11        | READ        |        3
+            29 | RES-11        | WRITE       |        3
+            33 | RES-12        | EXECUTE     |        3
+            31 | RES-12        | READ        |        3
+            32 | RES-12        | WRITE       |        3
+            12 | RES-05        | EXECUTE     |        4
+            10 | RES-05        | READ        |        4
+            11 | RES-05        | WRITE       |        4
+            15 | RES-06        | EXECUTE     |        4
+            13 | RES-06        | READ        |        4
+            14 | RES-06        | WRITE       |        4
+            18 | RES-07        | EXECUTE     |        4
+            16 | RES-07        | READ        |        4
+            17 | RES-07        | WRITE       |        4
+            19 | RES-08        | READ        |        4
+             4 | RES-APP-02    | EXECUTE     |        4
+             1 | RES-DB-01     | ADMIN       |        4
+             2 | RES-DB-01     | READ        |        4
+             3 | RES-DB-01     | WRITE       |        4
+             9 | RES-DOC-04    | READ        |        4
+             6 | RES-SRV-03    | EXECUTE     |        4
+             7 | RES-SRV-03    | READ        |        4
+             8 | RES-SRV-03    | WRITE       |        4
+             5 | RES-APP-02    | READ        |        6
+(33 rows)
+
+
+SOURCE: database/queries/040_aggregation.sql
+=== 1. COUNT and GROUP BY — attempts per user, split by outcome ===
+         email         | total | allowed | denied |         first_attempt         |         last_attempt          
+-----------------------+-------+---------+--------+-------------------------------+-------------------------------
+ rahul.verma@uni.edu   |     8 |       1 |      7 | 2026-10-22 14:13:31.549602+00 | 2026-10-22 14:13:31.59467+00
+ aisha.bello@uni.edu   |     6 |       0 |      6 | 2026-10-22 14:13:31.571954+00 | 2026-10-22 14:13:31.593883+00
+ arjun.rao@uni.edu     |     6 |       1 |      5 | 2026-10-22 14:13:31.576235+00 | 2026-10-22 14:13:31.595257+00
+ chen.wei@uni.edu      |     6 |       0 |      6 | 2026-10-22 14:13:31.572308+00 | 2026-10-22 14:13:31.593977+00
+ daniel.okoye@uni.edu  |     6 |       0 |      6 | 2026-10-22 14:13:31.5731+00   | 2026-10-22 14:13:31.594087+00
+ elena.rossi@uni.edu   |     6 |       0 |      6 | 2026-10-22 14:13:31.575934+00 | 2026-10-22 14:13:31.594964+00
+ fatima.noor@uni.edu   |     6 |       1 |      5 | 2026-10-22 14:13:31.573855+00 | 2026-10-22 14:13:31.594198+00
+ hana.kim@uni.edu      |     6 |       0 |      6 | 2026-10-22 14:13:31.576137+00 | 2026-10-22 14:13:31.595159+00
+ jonas.weber@uni.edu   |     6 |       1 |      5 | 2026-10-22 14:13:31.574422+00 | 2026-10-22 14:13:31.594314+00
+ leila.khan@uni.edu    |     6 |       1 |      5 | 2026-10-22 14:13:31.576526+00 | 2026-10-22 14:13:31.595551+00
+ lucas.silva@uni.edu   |     6 |       1 |      5 | 2026-10-22 14:13:31.576032+00 | 2026-10-22 14:13:31.595062+00
+ mei.chen@uni.edu      |     6 |       6 |      0 | 2026-10-22 14:13:31.574858+00 | 2026-10-22 14:13:31.594418+00
+ noah.brown@uni.edu    |     6 |       1 |      5 | 2026-10-22 14:13:31.576429+00 | 2026-10-22 14:13:31.595454+00
+ nora.patel@uni.edu    |     6 |       1 |      5 | 2026-10-22 14:13:31.575728+00 | 2026-10-22 14:13:31.594768+00
+ omar.hassan@uni.edu   |     6 |       1 |      5 | 2026-10-22 14:13:31.575832+00 | 2026-10-22 14:13:31.594866+00
+ priya.sharma@uni.edu  |     6 |       1 |      5 | 2026-10-22 14:13:31.57532+00  | 2026-10-22 14:13:31.594518+00
+ sofia.garcia@uni.edu  |     6 |       1 |      5 | 2026-10-22 14:13:31.576332+00 | 2026-10-22 14:13:31.595358+00
+ tomas.alvarez@uni.edu |     6 |       1 |      5 | 2026-10-22 14:13:31.575494+00 | 2026-10-22 14:13:31.594591+00
+ ethan.lee@uni.edu     |     5 |       1 |      4 | 2026-10-22 14:13:31.576845+00 | 2026-10-22 14:13:31.593766+00
+ maya.das@uni.edu      |     5 |       0 |      5 | 2026-10-22 14:13:31.576622+00 | 2026-10-22 14:13:31.593576+00
+(20 rows)
+
+
+=== 2. HAVING — only users with a denial rate above one quarter ===
+         email         | total | denied | denial_rate_pct 
+-----------------------+-------+--------+-----------------
+ aisha.bello@uni.edu   |     6 |      6 |           100.0
+ chen.wei@uni.edu      |     6 |      6 |           100.0
+ daniel.okoye@uni.edu  |     6 |      6 |           100.0
+ elena.rossi@uni.edu   |     6 |      6 |           100.0
+ hana.kim@uni.edu      |     6 |      6 |           100.0
+ maya.das@uni.edu      |     5 |      5 |           100.0
+ rahul.verma@uni.edu   |     8 |      7 |            87.5
+ arjun.rao@uni.edu     |     6 |      5 |            83.3
+ fatima.noor@uni.edu   |     6 |      5 |            83.3
+ jonas.weber@uni.edu   |     6 |      5 |            83.3
+ leila.khan@uni.edu    |     6 |      5 |            83.3
+ lucas.silva@uni.edu   |     6 |      5 |            83.3
+ noah.brown@uni.edu    |     6 |      5 |            83.3
+ nora.patel@uni.edu    |     6 |      5 |            83.3
+ omar.hassan@uni.edu   |     6 |      5 |            83.3
+ priya.sharma@uni.edu  |     6 |      5 |            83.3
+ sofia.garcia@uni.edu  |     6 |      5 |            83.3
+ tomas.alvarez@uni.edu |     6 |      5 |            83.3
+ ethan.lee@uni.edu     |     5 |      4 |            80.0
+(19 rows)
+
+
+=== 3. GROUP BY on a derived column — denial reasons, grouped ===
+      reason_code       | decision | events |          first_seen           |           last_seen           
+------------------------+----------+--------+-------------------------------+-------------------------------
+ PERMISSION_NOT_GRANTED | DENY     |     80 | 2026-10-22 14:13:31.5731+00   | 2026-10-22 14:13:31.595551+00
+ PERMISSION_GRANTED     | ALLOW    |     19 | 2026-10-22 14:13:31.549602+00 | 2026-10-22 14:13:31.594418+00
+ NO_ACTIVE_ROLE         | DENY     |     11 | 2026-10-22 14:13:31.571302+00 | 2026-10-22 14:13:31.59467+00
+ USER_DISABLED          | DENY     |      6 | 2026-10-22 14:13:31.571954+00 | 2026-10-22 14:13:31.593883+00
+ RESOURCE_INACTIVE      | DENY     |      4 | 2026-10-22 14:13:31.575614+00 | 2026-10-22 14:13:31.594591+00
+(5 rows)
+
+
+=== 4. Multi-level aggregation — per resource, then per resource and action ===
+ resource_code |    type     | attempts | denied | distinct_users | avg_attempts_for_type 
+---------------+-------------+----------+--------+----------------+-----------------------
+ RES-05        | DATABASE    |       12 |     12 |             10 |                 11.00
+ RES-06        | APPLICATION |       12 |     11 |             10 |                 10.33
+ RES-07        | SERVER      |       12 |     12 |             10 |                 11.00
+ RES-DB-01     | DATABASE    |       12 |      9 |             10 |                 11.00
+ RES-SRV-03    | SERVER      |       12 |      7 |             10 |                 11.00
+ RES-08        | DOCUMENT    |       10 |      9 |             10 |                  7.67
+ RES-APP-02    | APPLICATION |       10 |      3 |              8 |                 10.33
+ RES-09        | DATABASE    |        9 |      9 |              9 |                 11.00
+ RES-10        | APPLICATION |        9 |      8 |              9 |                 10.33
+ RES-11        | SERVER      |        9 |      9 |              9 |                 11.00
+ RES-12        | DOCUMENT    |        9 |      8 |              9 |                  7.67
+ RES-DOC-04    | DOCUMENT    |        4 |      4 |              4 |                  7.67
+(12 rows)
+
+
+=== 5. Role usage — how many assignments each role carries ===
+       role_name        | is_active | assigned_users | permissions_granted | inactive_flag 
+------------------------+-----------+----------------+---------------------+---------------
+ Viewer                 | t         |             15 |                   3 |             0
+ Analyst                | t         |             14 |                   4 |             0
+ Auditor                | t         |              2 |                   3 |             0
+ Administrator          | t         |              1 |                  33 |             0
+ Intern                 | t         |              1 |                   0 |             0
+ Legacy Contractor      | f         |              1 |                   2 |             2
+ Database Administrator | t         |              0 |                   9 |             0
+ Developer              | t         |              0 |                   2 |             0
+ Finance Analyst        | t         |              0 |                   3 |             0
+ HR Manager             | t         |              0 |                   3 |             0
+(10 rows)
+
+
+=== 6. Monthly volume — a time series via date_trunc ===
+  month  | attempts | allowed | denied 
+---------+----------+---------+--------
+ 2026-10 |      120 |      19 |    101
+(1 row)
+
+
+=== 7. HAVING over a JOIN with no matching rows (LEFT JOIN + IS NULL) ===
+ resource_code |    type     | action_count 
+---------------+-------------+--------------
+ RES-05        | DATABASE    |            3
+ RES-06        | APPLICATION |            3
+ RES-07        | SERVER      |            3
+ RES-08        | DOCUMENT    |            3
+ RES-09        | DATABASE    |            3
+ RES-10        | APPLICATION |            3
+ RES-11        | SERVER      |            3
+ RES-12        | DOCUMENT    |            3
+ RES-DB-01     | DATABASE    |            3
+ RES-SRV-03    | SERVER      |            3
+(10 rows)
+
+
+SOURCE: database/queries/050_subqueries.sql
+=== 1. SCALAR subquery — each user's denial count beside their name ===
+         email         | denials 
+-----------------------+---------
+ rahul.verma@uni.edu   |       7
+ aisha.bello@uni.edu   |       6
+ chen.wei@uni.edu      |       6
+ daniel.okoye@uni.edu  |       6
+ elena.rossi@uni.edu   |       6
+ hana.kim@uni.edu      |       6
+ arjun.rao@uni.edu     |       5
+ fatima.noor@uni.edu   |       5
+ jonas.weber@uni.edu   |       5
+ leila.khan@uni.edu    |       5
+ lucas.silva@uni.edu   |       5
+ maya.das@uni.edu      |       5
+ noah.brown@uni.edu    |       5
+ nora.patel@uni.edu    |       5
+ omar.hassan@uni.edu   |       5
+ priya.sharma@uni.edu  |       5
+ sofia.garcia@uni.edu  |       5
+ tomas.alvarez@uni.edu |       5
+ ethan.lee@uni.edu     |       4
+ mei.chen@uni.edu      |       0
+(20 rows)
+
+
+=== 2. Scalar subquery in FROM — a derived table: users with no roles ===
+ user_id |  full_name  |        email        
+---------+-------------+---------------------
+       2 | Chen Wei    | chen.wei@uni.edu
+       9 | Rahul Verma | rahul.verma@uni.edu
+(2 rows)
+
+
+=== 3. IN — active users who have attempted something DENIED ===
+ user_id |   full_name   |         email         
+---------+---------------+-----------------------
+       2 | Chen Wei      | chen.wei@uni.edu
+       3 | Daniel Okoye  | daniel.okoye@uni.edu
+       4 | Fatima Noor   | fatima.noor@uni.edu
+       5 | Jonas Weber   | jonas.weber@uni.edu
+       7 | Priya Sharma  | priya.sharma@uni.edu
+       8 | Tomas Alvarez | tomas.alvarez@uni.edu
+       9 | Rahul Verma   | rahul.verma@uni.edu
+      10 | Nora Patel    | nora.patel@uni.edu
+      11 | Omar Hassan   | omar.hassan@uni.edu
+      12 | Elena Rossi   | elena.rossi@uni.edu
+      13 | Lucas Silva   | lucas.silva@uni.edu
+      14 | Hana Kim      | hana.kim@uni.edu
+      15 | Arjun Rao     | arjun.rao@uni.edu
+      16 | Sofia Garcia  | sofia.garcia@uni.edu
+      17 | Noah Brown    | noah.brown@uni.edu
+      18 | Leila Khan    | leila.khan@uni.edu
+      19 | Maya Das      | maya.das@uni.edu
+      20 | Ethan Lee     | ethan.lee@uni.edu
+(18 rows)
+
+
+=== 4. NOT IN — resources that were never the subject of an ALLOWED attempt ===
+     (NULL-safe check: NOT IN is unsafe when the subquery can yield NULL)
+ resource_id | resource_code |        name        
+-------------+---------------+--------------------
+           4 | RES-DOC-04    | Legacy Archive
+           5 | RES-05        | Employee Directory
+           7 | RES-07        | Build Server
+           9 | RES-09        | Payroll Database
+          11 | RES-11        | Research Server
+(5 rows)
+
+
+=== 5. EXISTS (semi-join) — permissions granted by more than one role ===
+ permission_id | resource_code | action_code 
+---------------+---------------+-------------
+            12 | RES-05        | EXECUTE
+            10 | RES-05        | READ
+            11 | RES-05        | WRITE
+            24 | RES-09        | EXECUTE
+            22 | RES-09        | READ
+            23 | RES-09        | WRITE
+             4 | RES-APP-02    | EXECUTE
+             5 | RES-APP-02    | READ
+             1 | RES-DB-01     | ADMIN
+             2 | RES-DB-01     | READ
+             3 | RES-DB-01     | WRITE
+             9 | RES-DOC-04    | READ
+             6 | RES-SRV-03    | EXECUTE
+             7 | RES-SRV-03    | READ
+             8 | RES-SRV-03    | WRITE
+(15 rows)
+
+
+=== 6. CORRELATED subquery in a WHERE clause — users with NO audit history ===
+ user_id | full_name | email | status 
+---------+-----------+-------+--------
+(0 rows)
+
+
+=== 7. CORRELATED subquery — "more than the average" attempts per user ===
+        email        | attempts 
+---------------------+----------
+ rahul.verma@uni.edu |        8
+(1 row)
+
+
+=== 8. Nested correlated subquery — has this user ever been denied ===
+         email         |  status  |       standing        
+-----------------------+----------+-----------------------
+ mei.chen@uni.edu      | ACTIVE   | clean record
+ aisha.bello@uni.edu   | DISABLED | has denials on record
+ arjun.rao@uni.edu     | ACTIVE   | has denials on record
+ chen.wei@uni.edu      | ACTIVE   | has denials on record
+ daniel.okoye@uni.edu  | ACTIVE   | has denials on record
+ elena.rossi@uni.edu   | ACTIVE   | has denials on record
+ ethan.lee@uni.edu     | ACTIVE   | has denials on record
+ fatima.noor@uni.edu   | ACTIVE   | has denials on record
+ hana.kim@uni.edu      | ACTIVE   | has denials on record
+ jonas.weber@uni.edu   | ACTIVE   | has denials on record
+ leila.khan@uni.edu    | ACTIVE   | has denials on record
+ lucas.silva@uni.edu   | ACTIVE   | has denials on record
+ maya.das@uni.edu      | ACTIVE   | has denials on record
+ noah.brown@uni.edu    | ACTIVE   | has denials on record
+ nora.patel@uni.edu    | ACTIVE   | has denials on record
+ omar.hassan@uni.edu   | ACTIVE   | has denials on record
+ priya.sharma@uni.edu  | ACTIVE   | has denials on record
+ rahul.verma@uni.edu   | ACTIVE   | has denials on record
+ sofia.garcia@uni.edu  | ACTIVE   | has denials on record
+ tomas.alvarez@uni.edu | ACTIVE   | has denials on record
+(20 rows)
+
+
+SOURCE: database/queries/060_views.sql
+=== 1. vw_active_users_with_roles — active users holding active roles ===
+ department_name  |   full_name   |         email         |   role_name   
+------------------+---------------+-----------------------+---------------
+ Computer Science | Daniel Okoye  | daniel.okoye@uni.edu  | Auditor
+ Computer Science | Ethan Lee     | ethan.lee@uni.edu     | Analyst
+ Computer Science | Ethan Lee     | ethan.lee@uni.edu     | Intern
+ Computer Science | Ethan Lee     | ethan.lee@uni.edu     | Viewer
+ Computer Science | Jonas Weber   | jonas.weber@uni.edu   | Auditor
+ Computer Science | Jonas Weber   | jonas.weber@uni.edu   | Viewer
+ Computer Science | Nora Patel    | nora.patel@uni.edu    | Analyst
+ Computer Science | Nora Patel    | nora.patel@uni.edu    | Viewer
+ Computer Science | Priya Sharma  | priya.sharma@uni.edu  | Analyst
+ Computer Science | Priya Sharma  | priya.sharma@uni.edu  | Viewer
+ Engineering      | Hana Kim      | hana.kim@uni.edu      | Analyst
+ Engineering      | Hana Kim      | hana.kim@uni.edu      | Viewer
+ Facilities       | Fatima Noor   | fatima.noor@uni.edu   | Viewer
+ Facilities       | Lucas Silva   | lucas.silva@uni.edu   | Analyst
+ Facilities       | Lucas Silva   | lucas.silva@uni.edu   | Viewer
+ Finance          | Mei Lin Chen  | mei.chen@uni.edu      | Administrator
+ Finance          | Mei Lin Chen  | mei.chen@uni.edu      | Analyst
+ Finance          | Omar Hassan   | omar.hassan@uni.edu   | Analyst
+ Finance          | Omar Hassan   | omar.hassan@uni.edu   | Viewer
+ Human Resources  | Elena Rossi   | elena.rossi@uni.edu   | Analyst
+ Human Resources  | Elena Rossi   | elena.rossi@uni.edu   | Viewer
+ Human Resources  | Tomas Alvarez | tomas.alvarez@uni.edu | Viewer
+ Legal            | Noah Brown    | noah.brown@uni.edu    | Analyst
+ Legal            | Noah Brown    | noah.brown@uni.edu    | Viewer
+ Operations       | Sofia Garcia  | sofia.garcia@uni.edu  | Analyst
+ Operations       | Sofia Garcia  | sofia.garcia@uni.edu  | Viewer
+ Research         | Leila Khan    | leila.khan@uni.edu    | Analyst
+ Research         | Leila Khan    | leila.khan@uni.edu    | Viewer
+ Security         | Arjun Rao     | arjun.rao@uni.edu     | Analyst
+ Security         | Arjun Rao     | arjun.rao@uni.edu     | Viewer
+ Support          | Maya Das      | maya.das@uni.edu      | Analyst
+ Support          | Maya Das      | maya.das@uni.edu      | Viewer
+(32 rows)
+
+
+=== 2. vw_effective_user_permissions — FR-04, the core answer ===
+         email         | resource_code | action_code 
+-----------------------+---------------+-------------
+ arjun.rao@uni.edu     | RES-APP-02    | EXECUTE
+ arjun.rao@uni.edu     | RES-APP-02    | READ
+ arjun.rao@uni.edu     | RES-DB-01     | READ
+ arjun.rao@uni.edu     | RES-DB-01     | WRITE
+ arjun.rao@uni.edu     | RES-SRV-03    | READ
+ daniel.okoye@uni.edu  | RES-DB-01     | READ
+ daniel.okoye@uni.edu  | RES-SRV-03    | READ
+ elena.rossi@uni.edu   | RES-APP-02    | EXECUTE
+ elena.rossi@uni.edu   | RES-APP-02    | READ
+ elena.rossi@uni.edu   | RES-DB-01     | READ
+ elena.rossi@uni.edu   | RES-DB-01     | WRITE
+ elena.rossi@uni.edu   | RES-SRV-03    | READ
+ ethan.lee@uni.edu     | RES-APP-02    | EXECUTE
+ ethan.lee@uni.edu     | RES-APP-02    | READ
+ ethan.lee@uni.edu     | RES-DB-01     | READ
+ ethan.lee@uni.edu     | RES-DB-01     | WRITE
+ ethan.lee@uni.edu     | RES-SRV-03    | READ
+ fatima.noor@uni.edu   | RES-APP-02    | READ
+ fatima.noor@uni.edu   | RES-DB-01     | READ
+ hana.kim@uni.edu      | RES-APP-02    | EXECUTE
+ hana.kim@uni.edu      | RES-APP-02    | READ
+ hana.kim@uni.edu      | RES-DB-01     | READ
+ hana.kim@uni.edu      | RES-DB-01     | WRITE
+ hana.kim@uni.edu      | RES-SRV-03    | READ
+ jonas.weber@uni.edu   | RES-APP-02    | READ
+ jonas.weber@uni.edu   | RES-DB-01     | READ
+ jonas.weber@uni.edu   | RES-SRV-03    | READ
+ leila.khan@uni.edu    | RES-APP-02    | EXECUTE
+ leila.khan@uni.edu    | RES-APP-02    | READ
+ leila.khan@uni.edu    | RES-DB-01     | READ
+ leila.khan@uni.edu    | RES-DB-01     | WRITE
+ leila.khan@uni.edu    | RES-SRV-03    | READ
+ lucas.silva@uni.edu   | RES-APP-02    | EXECUTE
+ lucas.silva@uni.edu   | RES-APP-02    | READ
+ lucas.silva@uni.edu   | RES-DB-01     | READ
+ lucas.silva@uni.edu   | RES-DB-01     | WRITE
+ lucas.silva@uni.edu   | RES-SRV-03    | READ
+ maya.das@uni.edu      | RES-APP-02    | EXECUTE
+ maya.das@uni.edu      | RES-APP-02    | READ
+ maya.das@uni.edu      | RES-DB-01     | READ
+ maya.das@uni.edu      | RES-DB-01     | WRITE
+ maya.das@uni.edu      | RES-SRV-03    | READ
+ mei.chen@uni.edu      | RES-05        | EXECUTE
+ mei.chen@uni.edu      | RES-05        | READ
+ mei.chen@uni.edu      | RES-05        | WRITE
+ mei.chen@uni.edu      | RES-06        | EXECUTE
+ mei.chen@uni.edu      | RES-06        | READ
+ mei.chen@uni.edu      | RES-06        | WRITE
+ mei.chen@uni.edu      | RES-07        | EXECUTE
+ mei.chen@uni.edu      | RES-07        | READ
+ mei.chen@uni.edu      | RES-07        | WRITE
+ mei.chen@uni.edu      | RES-08        | EXECUTE
+ mei.chen@uni.edu      | RES-08        | READ
+ mei.chen@uni.edu      | RES-08        | WRITE
+ mei.chen@uni.edu      | RES-09        | EXECUTE
+ mei.chen@uni.edu      | RES-09        | READ
+ mei.chen@uni.edu      | RES-09        | WRITE
+ mei.chen@uni.edu      | RES-10        | EXECUTE
+ mei.chen@uni.edu      | RES-10        | READ
+ mei.chen@uni.edu      | RES-10        | WRITE
+ mei.chen@uni.edu      | RES-11        | EXECUTE
+ mei.chen@uni.edu      | RES-11        | READ
+ mei.chen@uni.edu      | RES-11        | WRITE
+ mei.chen@uni.edu      | RES-12        | EXECUTE
+ mei.chen@uni.edu      | RES-12        | READ
+ mei.chen@uni.edu      | RES-12        | WRITE
+ mei.chen@uni.edu      | RES-APP-02    | EXECUTE
+ mei.chen@uni.edu      | RES-APP-02    | READ
+ mei.chen@uni.edu      | RES-DB-01     | ADMIN
+ mei.chen@uni.edu      | RES-DB-01     | READ
+ mei.chen@uni.edu      | RES-DB-01     | WRITE
+ mei.chen@uni.edu      | RES-SRV-03    | EXECUTE
+ mei.chen@uni.edu      | RES-SRV-03    | READ
+ mei.chen@uni.edu      | RES-SRV-03    | WRITE
+ noah.brown@uni.edu    | RES-APP-02    | EXECUTE
+ noah.brown@uni.edu    | RES-APP-02    | READ
+ noah.brown@uni.edu    | RES-DB-01     | READ
+ noah.brown@uni.edu    | RES-DB-01     | WRITE
+ noah.brown@uni.edu    | RES-SRV-03    | READ
+ nora.patel@uni.edu    | RES-APP-02    | EXECUTE
+ nora.patel@uni.edu    | RES-APP-02    | READ
+ nora.patel@uni.edu    | RES-DB-01     | READ
+ nora.patel@uni.edu    | RES-DB-01     | WRITE
+ nora.patel@uni.edu    | RES-SRV-03    | READ
+ omar.hassan@uni.edu   | RES-APP-02    | EXECUTE
+ omar.hassan@uni.edu   | RES-APP-02    | READ
+ omar.hassan@uni.edu   | RES-DB-01     | READ
+ omar.hassan@uni.edu   | RES-DB-01     | WRITE
+ omar.hassan@uni.edu   | RES-SRV-03    | READ
+ priya.sharma@uni.edu  | RES-APP-02    | EXECUTE
+ priya.sharma@uni.edu  | RES-APP-02    | READ
+ priya.sharma@uni.edu  | RES-DB-01     | READ
+ priya.sharma@uni.edu  | RES-DB-01     | WRITE
+ priya.sharma@uni.edu  | RES-SRV-03    | READ
+ sofia.garcia@uni.edu  | RES-APP-02    | EXECUTE
+ sofia.garcia@uni.edu  | RES-APP-02    | READ
+ sofia.garcia@uni.edu  | RES-DB-01     | READ
+ sofia.garcia@uni.edu  | RES-DB-01     | WRITE
+ sofia.garcia@uni.edu  | RES-SRV-03    | READ
+ tomas.alvarez@uni.edu | RES-APP-02    | READ
+ tomas.alvarez@uni.edu | RES-DB-01     | READ
+(101 rows)
+
+
+=== 2b. Effective permissions per user, counted ===
+         email         | effective_permissions 
+-----------------------+-----------------------
+ mei.chen@uni.edu      |                    32
+ arjun.rao@uni.edu     |                     5
+ elena.rossi@uni.edu   |                     5
+ ethan.lee@uni.edu     |                     5
+ hana.kim@uni.edu      |                     5
+ leila.khan@uni.edu    |                     5
+ lucas.silva@uni.edu   |                     5
+ maya.das@uni.edu      |                     5
+ noah.brown@uni.edu    |                     5
+ nora.patel@uni.edu    |                     5
+ omar.hassan@uni.edu   |                     5
+ priya.sharma@uni.edu  |                     5
+ sofia.garcia@uni.edu  |                     5
+ jonas.weber@uni.edu   |                     3
+ daniel.okoye@uni.edu  |                     2
+ fatima.noor@uni.edu   |                     2
+ tomas.alvarez@uni.edu |                     2
+(17 rows)
+
+
+=== 2c. Two role paths collapse to one row in the view ===
+     Viewer and Analyst both grant Priya RES-DB-01:READ; the view returns 1 row.
+ rows_from_view 
+----------------
+              1
+(1 row)
+
+
+=== 2d. Users with no effective permissions at all ===
+     Aisha is DISABLED; Chen holds no role. Default-deny, visible as data.
+        email        |  status  
+---------------------+----------
+ aisha.bello@uni.edu | DISABLED
+ chen.wei@uni.edu    | ACTIVE
+ rahul.verma@uni.edu | ACTIVE
+(3 rows)
+
+
+=== 3. vw_resource_access_summary ===
+ resource_code | resource_type | is_active | defined_actions | roles_referencing | users_with_any_role_path | attempts | denied 
+---------------+---------------+-----------+-----------------+-------------------+--------------------------+----------+--------
+ RES-05        | DATABASE      | t         |               3 |                 3 |                        1 |       12 |     12
+ RES-06        | APPLICATION   | t         |               3 |                 1 |                        1 |       12 |     11
+ RES-07        | SERVER        | t         |               3 |                 1 |                        1 |       12 |     12
+ RES-DB-01     | DATABASE      | t         |               3 |                 6 |                       18 |       12 |      9
+ RES-SRV-03    | SERVER        | t         |               3 |                 5 |                       16 |       12 |      7
+ RES-08        | DOCUMENT      | t         |               3 |                 1 |                        1 |       10 |      9
+ RES-APP-02    | APPLICATION   | t         |               2 |                 4 |                       17 |       10 |      3
+ RES-09        | DATABASE      | t         |               3 |                 2 |                        1 |        9 |      9
+ RES-10        | APPLICATION   | t         |               3 |                 1 |                        1 |        9 |      8
+ RES-11        | SERVER        | t         |               3 |                 1 |                        1 |        9 |      9
+ RES-12        | DOCUMENT      | t         |               3 |                 1 |                        1 |        9 |      8
+ RES-DOC-04    | DOCUMENT      | f         |               1 |                 3 |                       17 |        4 |      4
+(12 rows)
+
+
+=== 4. vw_access_audit_history — most recent first ===
+        at        |          who           |  resource   |  action  | result |      reason_code       
+------------------+------------------------+-------------+----------+--------+------------------------
+ 2026-10-22 14:13 | leila.khan@uni.edu     | RES-08      | READ     | DENY   | PERMISSION_NOT_GRANTED
+ 2026-10-22 14:13 | noah.brown@uni.edu     | RES-07      | EXECUTE  | DENY   | PERMISSION_NOT_GRANTED
+ 2026-10-22 14:13 | sofia.garcia@uni.edu   | RES-07      | WRITE    | DENY   | PERMISSION_NOT_GRANTED
+ 2026-10-22 14:13 | arjun.rao@uni.edu      | RES-07      | READ     | DENY   | PERMISSION_NOT_GRANTED
+ 2026-10-22 14:13 | hana.kim@uni.edu       | RES-06      | EXECUTE  | DENY   | PERMISSION_NOT_GRANTED
+ 2026-10-22 14:13 | lucas.silva@uni.edu    | RES-06      | WRITE    | DENY   | PERMISSION_NOT_GRANTED
+ 2026-10-22 14:13 | elena.rossi@uni.edu    | RES-06      | READ     | DENY   | PERMISSION_NOT_GRANTED
+ 2026-10-22 14:13 | omar.hassan@uni.edu    | RES-05      | EXECUTE  | DENY   | PERMISSION_NOT_GRANTED
+ 2026-10-22 14:13 | nora.patel@uni.edu     | RES-05      | WRITE    | DENY   | PERMISSION_NOT_GRANTED
+ 2026-10-22 14:13 | rahul.verma@uni.edu    | RES-05      | READ     | DENY   | NO_ACTIVE_ROLE
+ 2026-10-22 14:13 | tomas.alvarez@uni.edu  | RES-DOC-04  | READ     | DENY   | RESOURCE_INACTIVE
+ 2026-10-22 14:13 | priya.sharma@uni.edu   | RES-SRV-03  | WRITE    | DENY   | PERMISSION_NOT_GRANTED
+ 2026-10-22 14:13 | mei.chen@uni.edu       | RES-SRV-03  | READ     | ALLOW  | PERMISSION_GRANTED
+ 2026-10-22 14:13 | jonas.weber@uni.edu    | RES-SRV-03  | EXECUTE  | DENY   | PERMISSION_NOT_GRANTED
+ 2026-10-22 14:13 | fatima.noor@uni.edu    | RES-APP-02  | READ     | ALLOW  | PERMISSION_GRANTED
+(15 rows)
+
+
+=== 5. vw_denied_access_attempts — FR-06 denial report ===
+         email         | resource_code | action_code | denied_attempts |         first_denied          |          last_denied          
+-----------------------+---------------+-------------+-----------------+-------------------------------+-------------------------------
+ aisha.bello@uni.edu   | RES-06        | EXECUTE     |               1 | 2026-10-22 14:13:31.583299+00 | 2026-10-22 14:13:31.583299+00
+ aisha.bello@uni.edu   | RES-08        | EXECUTE     |               1 | 2026-10-22 14:13:31.576928+00 | 2026-10-22 14:13:31.576928+00
+ aisha.bello@uni.edu   | RES-11        | READ        |               1 | 2026-10-22 14:13:31.581141+00 | 2026-10-22 14:13:31.581141+00
+ aisha.bello@uni.edu   | RES-DB-01     | ADMIN       |               1 | 2026-10-22 14:13:31.571954+00 | 2026-10-22 14:13:31.571954+00
+ aisha.bello@uni.edu   | RES-DB-01     | READ        |               1 | 2026-10-22 14:13:31.593883+00 | 2026-10-22 14:13:31.593883+00
+ aisha.bello@uni.edu   | RES-SRV-03    | WRITE       |               1 | 2026-10-22 14:13:31.579082+00 | 2026-10-22 14:13:31.579082+00
+ arjun.rao@uni.edu     | RES-06        | EXECUTE     |               1 | 2026-10-22 14:13:31.576235+00 | 2026-10-22 14:13:31.576235+00
+ arjun.rao@uni.edu     | RES-07        | READ        |               1 | 2026-10-22 14:13:31.595257+00 | 2026-10-22 14:13:31.595257+00
+ arjun.rao@uni.edu     | RES-09        | READ        |               1 | 2026-10-22 14:13:31.580522+00 | 2026-10-22 14:13:31.580522+00
+ arjun.rao@uni.edu     | RES-11        | WRITE       |               1 | 2026-10-22 14:13:31.585391+00 | 2026-10-22 14:13:31.585391+00
+ arjun.rao@uni.edu     | RES-DOC-04    | READ        |               1 | 2026-10-22 14:13:31.582664+00 | 2026-10-22 14:13:31.582664+00
+ chen.wei@uni.edu      | RES-07        | READ        |               1 | 2026-10-22 14:13:31.583405+00 | 2026-10-22 14:13:31.583405+00
+ chen.wei@uni.edu      | RES-09        | READ        |               1 | 2026-10-22 14:13:31.577011+00 | 2026-10-22 14:13:31.577011+00
+ chen.wei@uni.edu      | RES-11        | WRITE       |               1 | 2026-10-22 14:13:31.581221+00 | 2026-10-22 14:13:31.581221+00
+ chen.wei@uni.edu      | RES-DB-01     | READ        |               1 | 2026-10-22 14:13:31.572308+00 | 2026-10-22 14:13:31.572308+00
+ chen.wei@uni.edu      | RES-DB-01     | WRITE       |               1 | 2026-10-22 14:13:31.593977+00 | 2026-10-22 14:13:31.593977+00
+ chen.wei@uni.edu      | RES-DOC-04    | READ        |               1 | 2026-10-22 14:13:31.579153+00 | 2026-10-22 14:13:31.579153+00
+ daniel.okoye@uni.edu  | RES-05        | READ        |               1 | 2026-10-22 14:13:31.579252+00 | 2026-10-22 14:13:31.579252+00
+ daniel.okoye@uni.edu  | RES-07        | WRITE       |               1 | 2026-10-22 14:13:31.583527+00 | 2026-10-22 14:13:31.583527+00
+ daniel.okoye@uni.edu  | RES-09        | WRITE       |               1 | 2026-10-22 14:13:31.577113+00 | 2026-10-22 14:13:31.577113+00
+ daniel.okoye@uni.edu  | RES-11        | EXECUTE     |               1 | 2026-10-22 14:13:31.581346+00 | 2026-10-22 14:13:31.581346+00
+ daniel.okoye@uni.edu  | RES-APP-02    | EXECUTE     |               1 | 2026-10-22 14:13:31.594087+00 | 2026-10-22 14:13:31.594087+00
+ daniel.okoye@uni.edu  | RES-DB-01     | WRITE       |               1 | 2026-10-22 14:13:31.5731+00   | 2026-10-22 14:13:31.5731+00
+ elena.rossi@uni.edu   | RES-05        | EXECUTE     |               1 | 2026-10-22 14:13:31.575934+00 | 2026-10-22 14:13:31.575934+00
+ elena.rossi@uni.edu   | RES-06        | READ        |               1 | 2026-10-22 14:13:31.594964+00 | 2026-10-22 14:13:31.594964+00
+ elena.rossi@uni.edu   | RES-08        | READ        |               1 | 2026-10-22 14:13:31.580217+00 | 2026-10-22 14:13:31.580217+00
+ elena.rossi@uni.edu   | RES-10        | WRITE       |               1 | 2026-10-22 14:13:31.584519+00 | 2026-10-22 14:13:31.584519+00
+ elena.rossi@uni.edu   | RES-12        | WRITE       |               1 | 2026-10-22 14:13:31.578201+00 | 2026-10-22 14:13:31.578201+00
+ elena.rossi@uni.edu   | RES-SRV-03    | EXECUTE     |               1 | 2026-10-22 14:13:31.582343+00 | 2026-10-22 14:13:31.582343+00
+ ethan.lee@uni.edu     | RES-06        | WRITE       |               1 | 2026-10-22 14:13:31.583223+00 | 2026-10-22 14:13:31.583223+00
+ ethan.lee@uni.edu     | RES-08        | WRITE       |               1 | 2026-10-22 14:13:31.576845+00 | 2026-10-22 14:13:31.576845+00
+ ethan.lee@uni.edu     | RES-10        | EXECUTE     |               1 | 2026-10-22 14:13:31.581068+00 | 2026-10-22 14:13:31.581068+00
+ ethan.lee@uni.edu     | RES-DB-01     | ADMIN       |               1 | 2026-10-22 14:13:31.593766+00 | 2026-10-22 14:13:31.593766+00
+ fatima.noor@uni.edu   | RES-05        | WRITE       |               1 | 2026-10-22 14:13:31.579401+00 | 2026-10-22 14:13:31.579401+00
+ fatima.noor@uni.edu   | RES-07        | EXECUTE     |               1 | 2026-10-22 14:13:31.583632+00 | 2026-10-22 14:13:31.583632+00
+ fatima.noor@uni.edu   | RES-09        | EXECUTE     |               1 | 2026-10-22 14:13:31.57724+00  | 2026-10-22 14:13:31.57724+00
+ fatima.noor@uni.edu   | RES-12        | READ        |               1 | 2026-10-22 14:13:31.581482+00 | 2026-10-22 14:13:31.581482+00
+ fatima.noor@uni.edu   | RES-APP-02    | EXECUTE     |               1 | 2026-10-22 14:13:31.573855+00 | 2026-10-22 14:13:31.573855+00
+ hana.kim@uni.edu      | RES-06        | EXECUTE     |               1 | 2026-10-22 14:13:31.595159+00 | 2026-10-22 14:13:31.595159+00
+ hana.kim@uni.edu      | RES-06        | WRITE       |               1 | 2026-10-22 14:13:31.576137+00 | 2026-10-22 14:13:31.576137+00
+ hana.kim@uni.edu      | RES-08        | EXECUTE     |               1 | 2026-10-22 14:13:31.580418+00 | 2026-10-22 14:13:31.580418+00
+ hana.kim@uni.edu      | RES-11        | READ        |               1 | 2026-10-22 14:13:31.585157+00 | 2026-10-22 14:13:31.585157+00
+ hana.kim@uni.edu      | RES-DB-01     | ADMIN       |               1 | 2026-10-22 14:13:31.578407+00 | 2026-10-22 14:13:31.578407+00
+ hana.kim@uni.edu      | RES-SRV-03    | WRITE       |               1 | 2026-10-22 14:13:31.58256+00  | 2026-10-22 14:13:31.58256+00
+ jonas.weber@uni.edu   | RES-05        | EXECUTE     |               1 | 2026-10-22 14:13:31.579513+00 | 2026-10-22 14:13:31.579513+00
+ jonas.weber@uni.edu   | RES-08        | READ        |               1 | 2026-10-22 14:13:31.583741+00 | 2026-10-22 14:13:31.583741+00
+ jonas.weber@uni.edu   | RES-10        | READ        |               1 | 2026-10-22 14:13:31.577374+00 | 2026-10-22 14:13:31.577374+00
+ jonas.weber@uni.edu   | RES-12        | WRITE       |               1 | 2026-10-22 14:13:31.581605+00 | 2026-10-22 14:13:31.581605+00
+ jonas.weber@uni.edu   | RES-SRV-03    | EXECUTE     |               1 | 2026-10-22 14:13:31.594314+00 | 2026-10-22 14:13:31.594314+00
+ leila.khan@uni.edu    | RES-05        | EXECUTE     |               1 | 2026-10-22 14:13:31.583017+00 | 2026-10-22 14:13:31.583017+00
+ leila.khan@uni.edu    | RES-07        | EXECUTE     |               1 | 2026-10-22 14:13:31.576526+00 | 2026-10-22 14:13:31.576526+00
+ leila.khan@uni.edu    | RES-08        | READ        |               1 | 2026-10-22 14:13:31.595551+00 | 2026-10-22 14:13:31.595551+00
+ leila.khan@uni.edu    | RES-10        | READ        |               1 | 2026-10-22 14:13:31.580861+00 | 2026-10-22 14:13:31.580861+00
+ leila.khan@uni.edu    | RES-12        | WRITE       |               1 | 2026-10-22 14:13:31.593405+00 | 2026-10-22 14:13:31.593405+00
+ lucas.silva@uni.edu   | RES-06        | READ        |               1 | 2026-10-22 14:13:31.576032+00 | 2026-10-22 14:13:31.576032+00
+ lucas.silva@uni.edu   | RES-06        | WRITE       |               1 | 2026-10-22 14:13:31.595062+00 | 2026-10-22 14:13:31.595062+00
+ lucas.silva@uni.edu   | RES-08        | WRITE       |               1 | 2026-10-22 14:13:31.580317+00 | 2026-10-22 14:13:31.580317+00
+ lucas.silva@uni.edu   | RES-10        | EXECUTE     |               1 | 2026-10-22 14:13:31.58484+00  | 2026-10-22 14:13:31.58484+00
+ lucas.silva@uni.edu   | RES-12        | EXECUTE     |               1 | 2026-10-22 14:13:31.578303+00 | 2026-10-22 14:13:31.578303+00
+ maya.das@uni.edu      | RES-06        | READ        |               1 | 2026-10-22 14:13:31.58312+00  | 2026-10-22 14:13:31.58312+00
+ maya.das@uni.edu      | RES-08        | READ        |               1 | 2026-10-22 14:13:31.576622+00 | 2026-10-22 14:13:31.576622+00
+ maya.das@uni.edu      | RES-10        | WRITE       |               1 | 2026-10-22 14:13:31.580963+00 | 2026-10-22 14:13:31.580963+00
+ maya.das@uni.edu      | RES-12        | EXECUTE     |               1 | 2026-10-22 14:13:31.593576+00 | 2026-10-22 14:13:31.593576+00
+ maya.das@uni.edu      | RES-SRV-03    | EXECUTE     |               1 | 2026-10-22 14:13:31.578906+00 | 2026-10-22 14:13:31.578906+00
+ noah.brown@uni.edu    | RES-05        | WRITE       |               1 | 2026-10-22 14:13:31.582911+00 | 2026-10-22 14:13:31.582911+00
+ noah.brown@uni.edu    | RES-07        | EXECUTE     |               1 | 2026-10-22 14:13:31.595454+00 | 2026-10-22 14:13:31.595454+00
+ noah.brown@uni.edu    | RES-07        | WRITE       |               1 | 2026-10-22 14:13:31.576429+00 | 2026-10-22 14:13:31.576429+00
+ noah.brown@uni.edu    | RES-09        | EXECUTE     |               1 | 2026-10-22 14:13:31.580755+00 | 2026-10-22 14:13:31.580755+00
+ noah.brown@uni.edu    | RES-12        | READ        |               1 | 2026-10-22 14:13:31.585792+00 | 2026-10-22 14:13:31.585792+00
+ nora.patel@uni.edu    | RES-05        | READ        |               1 | 2026-10-22 14:13:31.575728+00 | 2026-10-22 14:13:31.575728+00
+ nora.patel@uni.edu    | RES-05        | WRITE       |               1 | 2026-10-22 14:13:31.594768+00 | 2026-10-22 14:13:31.594768+00
+ nora.patel@uni.edu    | RES-07        | WRITE       |               1 | 2026-10-22 14:13:31.580013+00 | 2026-10-22 14:13:31.580013+00
+ nora.patel@uni.edu    | RES-09        | EXECUTE     |               1 | 2026-10-22 14:13:31.584222+00 | 2026-10-22 14:13:31.584222+00
+ nora.patel@uni.edu    | RES-11        | EXECUTE     |               1 | 2026-10-22 14:13:31.577987+00 | 2026-10-22 14:13:31.577987+00
+ omar.hassan@uni.edu   | RES-05        | EXECUTE     |               1 | 2026-10-22 14:13:31.594866+00 | 2026-10-22 14:13:31.594866+00
+ omar.hassan@uni.edu   | RES-05        | WRITE       |               1 | 2026-10-22 14:13:31.575832+00 | 2026-10-22 14:13:31.575832+00
+ omar.hassan@uni.edu   | RES-07        | EXECUTE     |               1 | 2026-10-22 14:13:31.580117+00 | 2026-10-22 14:13:31.580117+00
+ omar.hassan@uni.edu   | RES-10        | READ        |               1 | 2026-10-22 14:13:31.584364+00 | 2026-10-22 14:13:31.584364+00
+ omar.hassan@uni.edu   | RES-12        | READ        |               1 | 2026-10-22 14:13:31.578097+00 | 2026-10-22 14:13:31.578097+00
+ priya.sharma@uni.edu  | RES-06        | WRITE       |               1 | 2026-10-22 14:13:31.579725+00 | 2026-10-22 14:13:31.579725+00
+ priya.sharma@uni.edu  | RES-08        | EXECUTE     |               1 | 2026-10-22 14:13:31.583944+00 | 2026-10-22 14:13:31.583944+00
+ priya.sharma@uni.edu  | RES-10        | EXECUTE     |               1 | 2026-10-22 14:13:31.577645+00 | 2026-10-22 14:13:31.577645+00
+ priya.sharma@uni.edu  | RES-DB-01     | ADMIN       |               1 | 2026-10-22 14:13:31.581826+00 | 2026-10-22 14:13:31.581826+00
+ priya.sharma@uni.edu  | RES-SRV-03    | WRITE       |               1 | 2026-10-22 14:13:31.594518+00 | 2026-10-22 14:13:31.594518+00
+ rahul.verma@uni.edu   | RES-05        | READ        |               1 | 2026-10-22 14:13:31.59467+00  | 2026-10-22 14:13:31.59467+00
+ rahul.verma@uni.edu   | RES-07        | READ        |               1 | 2026-10-22 14:13:31.57991+00  | 2026-10-22 14:13:31.57991+00
+ rahul.verma@uni.edu   | RES-09        | WRITE       |               1 | 2026-10-22 14:13:31.584122+00 | 2026-10-22 14:13:31.584122+00
+ rahul.verma@uni.edu   | RES-11        | WRITE       |               1 | 2026-10-22 14:13:31.577835+00 | 2026-10-22 14:13:31.577835+00
+ rahul.verma@uni.edu   | RES-APP-02    | READ        |               1 | 2026-10-22 14:13:31.571302+00 | 2026-10-22 14:13:31.571302+00
+ rahul.verma@uni.edu   | RES-DB-01     | WRITE       |               1 | 2026-10-22 14:13:31.582019+00 | 2026-10-22 14:13:31.582019+00
+ rahul.verma@uni.edu   | RES-DOC-04    | READ        |               1 | 2026-10-22 14:13:31.575614+00 | 2026-10-22 14:13:31.575614+00
+ sofia.garcia@uni.edu  | RES-05        | READ        |               1 | 2026-10-22 14:13:31.5828+00   | 2026-10-22 14:13:31.5828+00
+ sofia.garcia@uni.edu  | RES-07        | READ        |               1 | 2026-10-22 14:13:31.576332+00 | 2026-10-22 14:13:31.576332+00
+ sofia.garcia@uni.edu  | RES-07        | WRITE       |               1 | 2026-10-22 14:13:31.595358+00 | 2026-10-22 14:13:31.595358+00
+ sofia.garcia@uni.edu  | RES-09        | WRITE       |               1 | 2026-10-22 14:13:31.580624+00 | 2026-10-22 14:13:31.580624+00
+ sofia.garcia@uni.edu  | RES-11        | EXECUTE     |               1 | 2026-10-22 14:13:31.585571+00 | 2026-10-22 14:13:31.585571+00
+ tomas.alvarez@uni.edu | RES-06        | EXECUTE     |               1 | 2026-10-22 14:13:31.579826+00 | 2026-10-22 14:13:31.579826+00
+ tomas.alvarez@uni.edu | RES-09        | READ        |               1 | 2026-10-22 14:13:31.584043+00 | 2026-10-22 14:13:31.584043+00
+ tomas.alvarez@uni.edu | RES-11        | READ        |               1 | 2026-10-22 14:13:31.577752+00 | 2026-10-22 14:13:31.577752+00
+ tomas.alvarez@uni.edu | RES-DOC-04    | READ        |               1 | 2026-10-22 14:13:31.594591+00 | 2026-10-22 14:13:31.594591+00
+ tomas.alvarez@uni.edu | RES-SRV-03    | WRITE       |               1 | 2026-10-22 14:13:31.575494+00 | 2026-10-22 14:13:31.575494+00
+(101 rows)
+
+
+=== 5b. Which user is being repeatedly denied, and why ===
+         email         | denials | distinct_causes |                  causes                   
+-----------------------+---------+-----------------+-------------------------------------------
+ rahul.verma@uni.edu   |       7 |               2 | NO_ACTIVE_ROLE, RESOURCE_INACTIVE
+ aisha.bello@uni.edu   |       6 |               1 | USER_DISABLED
+ chen.wei@uni.edu      |       6 |               2 | NO_ACTIVE_ROLE, RESOURCE_INACTIVE
+ daniel.okoye@uni.edu  |       6 |               1 | PERMISSION_NOT_GRANTED
+ elena.rossi@uni.edu   |       6 |               1 | PERMISSION_NOT_GRANTED
+ hana.kim@uni.edu      |       6 |               1 | PERMISSION_NOT_GRANTED
+ arjun.rao@uni.edu     |       5 |               2 | PERMISSION_NOT_GRANTED, RESOURCE_INACTIVE
+ fatima.noor@uni.edu   |       5 |               1 | PERMISSION_NOT_GRANTED
+ jonas.weber@uni.edu   |       5 |               1 | PERMISSION_NOT_GRANTED
+ leila.khan@uni.edu    |       5 |               1 | PERMISSION_NOT_GRANTED
+ lucas.silva@uni.edu   |       5 |               1 | PERMISSION_NOT_GRANTED
+ maya.das@uni.edu      |       5 |               1 | PERMISSION_NOT_GRANTED
+ noah.brown@uni.edu    |       5 |               1 | PERMISSION_NOT_GRANTED
+ nora.patel@uni.edu    |       5 |               1 | PERMISSION_NOT_GRANTED
+ omar.hassan@uni.edu   |       5 |               1 | PERMISSION_NOT_GRANTED
+ priya.sharma@uni.edu  |       5 |               1 | PERMISSION_NOT_GRANTED
+ sofia.garcia@uni.edu  |       5 |               1 | PERMISSION_NOT_GRANTED
+ tomas.alvarez@uni.edu |       5 |               2 | PERMISSION_NOT_GRANTED, RESOURCE_INACTIVE
+ ethan.lee@uni.edu     |       4 |               1 | PERMISSION_NOT_GRANTED
+(19 rows)
+
+ user_id |   full_name   | total_attempts | allowed_attempts | denied_attempts 
+---------+---------------+----------------+------------------+-----------------
+       1 | Aisha Bello   |              6 |                0 |               6
+       2 | Chen Wei      |              6 |                0 |               6
+       3 | Daniel Okoye  |              6 |                0 |               6
+       4 | Fatima Noor   |              6 |                1 |               5
+       5 | Jonas Weber   |              6 |                1 |               5
+       6 | Mei Lin Chen  |              6 |                6 |               0
+       7 | Priya Sharma  |              6 |                1 |               5
+       8 | Tomas Alvarez |              6 |                1 |               5
+       9 | Rahul Verma   |              8 |                1 |               7
+      10 | Nora Patel    |              6 |                1 |               5
+      11 | Omar Hassan   |              6 |                1 |               5
+      12 | Elena Rossi   |              6 |                0 |               6
+      13 | Lucas Silva   |              6 |                1 |               5
+      14 | Hana Kim      |              6 |                0 |               6
+      15 | Arjun Rao     |              6 |                1 |               5
+      16 | Sofia Garcia  |              6 |                1 |               5
+      17 | Noah Brown    |              6 |                1 |               5
+      18 | Leila Khan    |              6 |                1 |               5
+      19 | Maya Das      |              5 |                0 |               5
+      20 | Ethan Lee     |              5 |                1 |               4
+(20 rows)
+
+           routine_name           | routine_type 
+----------------------------------+--------------
+ access_log_is_append_only        | FUNCTION
+ assign_user_role                 | PROCEDURE
+ create_department                | FUNCTION
+ create_permission                | FUNCTION
+ create_resource                  | FUNCTION
+ create_role                      | FUNCTION
+ create_user                      | FUNCTION
+ evaluate_access                  | FUNCTION
+ generate_access_activity_summary | FUNCTION
+ get_effective_permissions        | FUNCTION
+ grant_role_permission            | PROCEDURE
+ normalize_app_user_email         | FUNCTION
+ permission_meaning_is_frozen     | FUNCTION
+ policy_lock                      | FUNCTION
+ revoke_role_permission           | PROCEDURE
+ revoke_user_role                 | PROCEDURE
+ set_resource_active              | PROCEDURE
+ set_role_active                  | PROCEDURE
+ set_user_status                  | PROCEDURE
+ update_department                | PROCEDURE
+ update_permission_identity       | PROCEDURE
+ update_user                      | PROCEDURE
+(22 rows)
+

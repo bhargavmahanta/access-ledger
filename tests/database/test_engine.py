@@ -12,7 +12,7 @@ def connect(user='postgres', **kw):
         raise RuntimeError('Tests require an accessledger_test* database')
     return psycopg.connect(host=os.getenv('PGHOST', str(Path(__file__).resolve().parents[2]/'.pgsock')),
                           port=os.getenv('PGPORT', '55432'), dbname=name,
-                          user=user, row_factory=dict_row, **kw)
+                          user=user, password=os.getenv('APP_DB_PASSWORD','local-demo-only') if user=='accessledger_demo_app' else os.getenv('PGPASSWORD'), row_factory=dict_row, **kw)
 
 
 @pytest.fixture
@@ -155,3 +155,28 @@ def test_transaction_rollback_has_no_audit_event(policy,db):
     except psycopg.Rollback:
         pass
     assert db.execute('SELECT count(*) n FROM access_log WHERE log_id=%s',(result['log_id'],)).fetchone()['n']==0
+
+
+def test_cursor_includes_an_employee_without_events(db,policy):
+    u,_,_,_=policy
+    row=db.execute('SELECT * FROM generate_access_activity_summary() WHERE user_id=%s',(u,)).fetchone()
+    assert row['total_attempts']==row['allowed_attempts']==row['denied_attempts']==0
+
+
+@pytest.mark.parametrize('table,values',[
+    ('department',{'department_name':'Null Test Department'}),
+    ('app_user',{'department_id':1,'full_name':'Null Test','email':'null-test@example.test','status':'ACTIVE'}),
+    ('role',{'role_name':'Null Test Role','is_active':True}),
+    ('user_role',{'user_id':1,'role_id':1,'assigned_at':'2026-01-01T00:00:00Z'}),
+    ('resource',{'resource_code':'NULL-TEST','name':'Null Test','type':'DATABASE','is_active':True}),
+    ('permission',{'resource_id':1,'action_code':'NULL_TEST'}),
+    ('role_permission',{'role_id':1,'permission_id':1,'granted_at':'2026-01-01T00:00:00Z'}),
+    ('access_log',{'user_id':1,'permission_id':1,'reason_code':'PERMISSION_NOT_GRANTED','occurred_at':'2026-01-01T00:00:00Z'}),
+])
+def test_required_columns_reject_nulls(db,table,values):
+    from psycopg import sql
+    for column in values:
+        invalid={**values,column:None}
+        with pytest.raises(psycopg.errors.NotNullViolation),db.transaction():
+            db.execute(sql.SQL('INSERT INTO {} ({}) VALUES ({})').format(sql.Identifier(table),
+                sql.SQL(',').join(map(sql.Identifier,invalid)),sql.SQL(',').join(sql.Placeholder() for _ in invalid)),list(invalid.values()))

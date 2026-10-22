@@ -19,3 +19,4 @@ frontend/playwright-report/
 .superpowers/
 *.log
 .env.*.local
+*.tsbuildinfo

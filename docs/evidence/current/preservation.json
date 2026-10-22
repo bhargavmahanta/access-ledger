@@ -1,0 +1,15 @@
+{
+  "historical_evidence_sha256": "0ef7ab8b73ff1ec38bbe2df1b188a0d2e1aab9b4779902b5ca6b6d243b96ee9b",
+  "historical_evidence_unchanged": true,
+  "baseline_commit": "1ebb24e",
+  "preserved_database_counts": {
+    "department": 4,
+    "app_user": 8,
+    "role": 5,
+    "user_role": 11,
+    "resource": 4,
+    "permission": 9,
+    "role_permission": 13,
+    "access_log": 38
+  }
+}

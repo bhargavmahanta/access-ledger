@@ -1,5 +1,8 @@
 import os
 os.environ.setdefault('PGDATABASE','accessledger_test')
+from pathlib import Path
+from dotenv import load_dotenv
+load_dotenv(Path(__file__).resolve().parents[1]/'.env')
 if not os.environ['PGDATABASE'].startswith('accessledger_test'):
     raise RuntimeError('All tests require a disposable accessledger_test* database')
 if os.getenv('DATABASE_URL'):

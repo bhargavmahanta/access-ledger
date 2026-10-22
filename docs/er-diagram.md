@@ -106,3 +106,6 @@ appear twice.
   `DOCUMENT` are examples, not a closed set — see `database-design.md` §4.4.
 - `ACCESS_LOG.reason_code` holds one of five controlled values; `database-design.md` §4.3
   lists them and explains the fifth.
+## Exported diagram
+
+[Vector Crow’s Foot diagram](er-diagram.svg) and [printable PNG](er-diagram.png) are generated from the live catalog by scripts/verification/capture-evidence.py and screenshots.py. Candidate keys, including the composite permission key, are listed in relational-schema.md.

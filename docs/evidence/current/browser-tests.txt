@@ -1,0 +1,12 @@
+
+> accessledger@1.0.0 test
+> playwright test
+
+
+Running 3 tests using 1 worker
+
+  ✓  1 tests/workflows.spec.ts:3:1 › employee registration, assignment, grant, evaluation and revocation retain history (3.3s)
+  ✓  2 tests/workflows.spec.ts:47:1 › all six pages render with no browser errors and mobile navigation works (3.9s)
+  ✓  3 tests/workflows.spec.ts:64:1 › pending evaluation keeps the submitted employee, resource and action fixed (2.3s)
+
+  3 passed (30.4s)

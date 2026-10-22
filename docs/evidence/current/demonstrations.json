@@ -1,0 +1,73 @@
+{
+  "captured_utc": "2026-10-22T14:13:38.933684+00:00",
+  "database": "accessledger_test_evidence",
+  "actual_login": "accessledger_demo_app",
+  "employee_registration": {
+    "user_id": 21,
+    "department_id": 1
+  },
+  "role_assignment": {
+    "user_id": 21,
+    "role_id": 11
+  },
+  "permission_assignment": {
+    "role_id": 11,
+    "permission_id": 2,
+    "effective_before": [],
+    "effective_after": [
+      {
+        "permission_id": 2,
+        "resource_id": 1,
+        "resource_code": "RES-DB-01",
+        "resource_name": "Reporting Database",
+        "action_code": "READ"
+      }
+    ]
+  },
+  "evaluation_before_revocation": {
+    "decision": "ALLOW",
+    "reason_code": "PERMISSION_GRANTED",
+    "log_id": 121,
+    "occurred_at": "2026-10-22 14:13:38.913449+00:00"
+  },
+  "evaluation_after_revocation": {
+    "decision": "DENY",
+    "reason_code": "NO_ACTIVE_ROLE",
+    "log_id": 122,
+    "occurred_at": "2026-10-22 14:13:38.924156+00:00"
+  },
+  "retained_history": [
+    {
+      "log_id": 121,
+      "occurred_at": "2026-10-22 14:13:38.913449+00:00",
+      "decision": "ALLOW",
+      "reason_code": "PERMISSION_GRANTED",
+      "user_id": 21,
+      "email": "submission.demo@example.com",
+      "full_name": "Demonstration Employee",
+      "department_name": "Computer Science",
+      "permission_id": 2,
+      "resource_id": 1,
+      "resource_code": "RES-DB-01",
+      "resource_name": "Reporting Database",
+      "resource_type": "DATABASE",
+      "action_code": "READ"
+    },
+    {
+      "log_id": 122,
+      "occurred_at": "2026-10-22 14:13:38.924156+00:00",
+      "decision": "DENY",
+      "reason_code": "NO_ACTIVE_ROLE",
+      "user_id": 21,
+      "email": "submission.demo@example.com",
+      "full_name": "Demonstration Employee",
+      "department_name": "Computer Science",
+      "permission_id": 2,
+      "resource_id": 1,
+      "resource_code": "RES-DB-01",
+      "resource_name": "Reporting Database",
+      "resource_type": "DATABASE",
+      "action_code": "READ"
+    }
+  ]
+}
