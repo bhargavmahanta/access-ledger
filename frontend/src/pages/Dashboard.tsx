@@ -1,0 +1,16 @@
+import { Link } from 'react-router-dom';
+import { ArrowUpRight, Users, KeyRound, Database, Activity, ShieldCheck, ShieldX } from 'lucide-react';
+import { useData } from '../api';
+import { Header, Panel, Loading, Badge, dateTime, Empty } from '../components/ui';
+import type { DashboardStats, Page, Audit, ResourceStats } from '../types';
+export default function Dashboard() {
+  const stats=useData<DashboardStats>('/reports/dashboard'); const events=useData<Page<Audit>>('/audit?limit=7'); const resources=useData<Page<ResourceStats>>('/reports/resources?limit=5');
+  const metrics=stats.data ? [ ['Total employees',stats.data.total_users,Users],['Active roles',stats.data.active_roles,KeyRound],['Registered resources',stats.data.total_resources,Database],['Access events',stats.data.total_events,Activity],['Allowed attempts',stats.data.allow_count,ShieldCheck],['Denied attempts',stats.data.deny_count,ShieldX] ] as const : [];
+  const max=Math.max(1,...(resources.data?.items.map(x=>x.attempts)||[]));
+  return <><Header title="Security overview" description="A clear view of access across your organization."><Link className="button primary" to="/access">Evaluate access <ArrowUpRight size={17}/></Link></Header><Loading error={stats.error||events.error||resources.error} loading={stats.isLoading}/>
+    <div className="stats-grid">{metrics.map(([label,n,Icon],i)=><div className="stat" key={label}><div className={'stat-icon tone-'+i}><Icon size={19}/></div><span>{label}</span><strong>{n.toLocaleString()}</strong><small>{i===4?'Permission granted':i===5?'Default deny applied':'Current database records'}</small></div>)}</div>
+    <div className="callout"><div className="callout-icon"><ShieldCheck size={25}/></div><div><h2>Every decision leaves a record.</h2><p>Evaluate an employee’s access, see the reason, and follow the event into the audit trail.</p></div><Link to="/audit">Explore the ledger <ArrowUpRight size={17}/></Link></div>
+    <div className="dashboard-grid"><Panel title="Recent access activity" caption="The latest evaluated requests" action={<Link className="text-link" to="/audit">View all activity <ArrowUpRight size={14}/></Link>}><div className="table-wrap"><table><thead><tr><th>Employee</th><th>Resource / action</th><th>Decision</th><th>When</th></tr></thead><tbody>{events.data?.items.map(e=><tr key={e.log_id}><td><strong>{e.full_name}</strong><small>{e.email}</small></td><td>{e.resource_name}<small className="mono">{e.action_code}</small></td><td><Badge good={e.decision==='ALLOW'}>{e.decision}</Badge></td><td className="time">{dateTime(e.occurred_at)}</td></tr>)}</tbody></table></div>{events.data?.total===0&&<Empty text="Evaluate a request to start the audit trail."/>}</Panel>
+    <Panel title="Resource activity" caption="Resources with the most attempts"><div className="resource-bars">{resources.data?.items.map(r=><div key={r.resource_id}><div><strong>{r.resource_name}</strong><span>{r.attempts}</span></div><div className="bar-track"><div style={{width:`${r.attempts/max*100}%`}}/></div><small className="mono">{r.resource_code} <span>{r.denied} denied</span></small></div>)}</div><div className="panel-note">Counts include allowed and denied requests.</div></Panel></div>
+  </>;
+}

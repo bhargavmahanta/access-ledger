@@ -1,0 +1,13 @@
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import App from './App';
+import Dashboard from './pages/Dashboard';
+import Users from './pages/Users';
+import Roles from './pages/Roles';
+import Resources from './pages/Resources';
+import Access from './pages/Access';
+import Audit from './pages/Audit';
+import './style.css';
+const router=createBrowserRouter([{path:'/',element:<App/>,children:[{index:true,element:<Dashboard/>},{path:'users',element:<Users/>},{path:'roles',element:<Roles/>},{path:'resources',element:<Resources/>},{path:'access',element:<Access/>},{path:'audit',element:<Audit/>},{path:'*',element:<div><h1>Page not found</h1><a href="/">Return to dashboard</a></div>}]}]);
+createRoot(document.getElementById('root')!).render(<StrictMode><RouterProvider router={router}/></StrictMode>);
