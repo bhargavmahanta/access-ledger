@@ -1,0 +1,6 @@
+# Generated media must remain binary in Git diffs.
+*.pdf binary
+*.png binary
+# SQL evidence/report excerpts retain psql's column padding verbatim.
+docs/evidence/current/*.txt whitespace=-blank-at-eol
+docs/final-report.md whitespace=-blank-at-eol
