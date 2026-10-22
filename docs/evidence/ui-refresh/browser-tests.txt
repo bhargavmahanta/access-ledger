@@ -1,0 +1,22 @@
+
+> accessledger@1.0.0 test
+> playwright test
+
+[WebServer] INFO:     Started server process [31253]
+[WebServer] INFO:     Waiting for application startup.
+[WebServer] INFO:     Application startup complete.
+[WebServer] INFO:     Uvicorn running on http://127.0.0.1:8001 (Press CTRL+C to quit)
+[WebServer] (node:31318) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 5 tests using 1 worker
+
+(node:31407) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/navigation.spec.ts:3:1 › page finder supports keyboard search, empty results, navigation and escape (1.8s)
+  ✓  2 tests/navigation.spec.ts:24:1 › all pages fit a mobile viewport and dialogs remain operable (6.6s)
+  ✓  3 tests/workflows.spec.ts:3:1 › employee registration, assignment, grant, evaluation and revocation retain history (3.6s)
+  ✓  4 tests/workflows.spec.ts:47:1 › all six pages render with no browser errors and mobile navigation works (4.9s)
+  ✓  5 tests/workflows.spec.ts:64:1 › pending evaluation keeps the submitted employee, resource and action fixed (2.5s)
+
+  5 passed (41.6s)

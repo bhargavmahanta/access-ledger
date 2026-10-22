@@ -8,6 +8,7 @@ import Roles from './pages/Roles';
 import Resources from './pages/Resources';
 import Access from './pages/Access';
 import Audit from './pages/Audit';
+import '@fontsource-variable/geist';
 import './style.css';
 const router=createBrowserRouter([{path:'/',element:<App/>,children:[{index:true,element:<Dashboard/>},{path:'users',element:<Users/>},{path:'roles',element:<Roles/>},{path:'resources',element:<Resources/>},{path:'access',element:<Access/>},{path:'audit',element:<Audit/>},{path:'*',element:<div><h1>Page not found</h1><a href="/">Return to dashboard</a></div>}]}]);
 createRoot(document.getElementById('root')!).render(<StrictMode><RouterProvider router={router}/></StrictMode>);
