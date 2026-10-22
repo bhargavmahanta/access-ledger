@@ -1,0 +1,13 @@
+# Local PostgreSQL cluster created by scripts/bootstrap-postgres.sh
+.tools/
+.pgdata/
+.pgsock/
+
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Environment
+.env
